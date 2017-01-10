@@ -122,11 +122,14 @@ module.exports = function (grunt) {
             }
         },
         clean: {
+            sass: {
+                src: ['.sass-cache/**']
+            },
             distPre: {
                 src: ['dist/*']
             },
             distPost: {
-                src: ['tmp/**', '.sass-cache/**']
+                src: ['tmp/**']
             }
         }
     });
@@ -145,7 +148,7 @@ module.exports = function (grunt) {
         grunt.loadNpmTasks(task);
     });
 
-    grunt.registerTask('scss', ['sass:src']);
+    grunt.registerTask('scss', ['sass:src', 'clean:sass']);
     grunt.registerTask('release', [
         'clean:distPre',
         'babel:dist',
@@ -155,6 +158,7 @@ module.exports = function (grunt) {
         'minjson:dist',
         'sass:dist',
         'copy:dist',
+        'clean:sass',
         'clean:distPost'
     ]);
 
