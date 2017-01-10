@@ -1,0 +1,37 @@
+{
+  // [ GENERAL ]
+  "extension_name": {
+    "message": "Leftside Back"
+  },
+  "extension_desc": {
+    "message": "Allows you to navigate back by just hitting the mouse on the left side of your screen."
+  },
+  // [ SETTINGS ]
+  "settings_title": {
+    "message": "Settings"
+  },
+  "settings_px_tolerance": {
+    "message": "Tolerance in pixels"
+  },
+  "settings_px_tolerance_maximized": {
+    "message": "Maximized"
+  },
+  "settings_px_tolerance_windowed": {
+    "message": "Windowed"
+  },
+  "settings_px_tolerance_desc": {
+    "message": "Amount of pixels from the left side of every page, in which a mouse click will cause the browser to navigate back. You can choose different values for maximized and windowed browser frame."
+  },
+  "settings_add_visual": {
+    "message": "Add visual"
+  },
+  "settings_add_visual_desc": {
+    "message": "Show an arrow on the left side of the page whenever a mouse click would cause the browser to navigate back."
+  },
+  "settings_save": {
+    "message": "Save"
+  },
+  "settings_saved_success": {
+    "message": "Changes saved successfully"
+  }
+}
