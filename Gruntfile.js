@@ -117,7 +117,7 @@ module.exports = function (grunt) {
                         dest: path.dist
                     },
                     {expand: true, cwd: "tmp/", src: ['js/**'], dest: path.dist},
-                    {expand: true, src: ['changelog.txt'], dest: path.dist}
+                    {expand: true, src: ['changelog.txt', 'license.txt'], dest: path.dist}
                 ]
             }
         },
