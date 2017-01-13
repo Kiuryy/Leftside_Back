@@ -29,9 +29,15 @@
     "message": "Show an arrow on the left side of the page whenever a mouse click would cause the browser to navigate back."
   },
   "settings_save": {
-    "message": "Save"
+    "message": "Save Changes"
   },
   "settings_saved_success": {
     "message": "Changes saved successfully"
+  },
+  "settings_restore": {
+    "message": "Restore Settings"
+  },
+  "settings_restored_success": {
+    "message": "Settings restored successfully"
   }
 }

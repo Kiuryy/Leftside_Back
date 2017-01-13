@@ -5,11 +5,20 @@
 ($ => {
     "use strict";
 
+    let classes = {
+        saved: "saved",
+        restored: "restored"
+    };
+
     let elm = {
+        body: $("body"),
+        title: $("head > title"),
+        rangeInputs: $("input[type='range']"),
         pxToleranceMaximized: $("input#pxToleranceMaximized"),
         pxToleranceWindowed: $("input#pxToleranceWindowed"),
         addVisual: $("input#addVisual"),
         save: $("button#save"),
+        restoreDefaults: $("button#restore"),
         copyright: $("span#copyright")
     };
 
@@ -22,7 +31,7 @@
 
     let initSettings = () => { // load settings
         let manifest = chrome.runtime.getManifest();
-        $("head > title").text(manifest.short_name + " - " + $("head > title").text());
+        elm.title.text(manifest.short_name + " - " + $("head > title").text());
 
         let createdDate = +elm.copyright.children("span.created").text();
         let currentYear = new Date().getFullYear();
@@ -50,7 +59,7 @@
         });
     };
 
-    $("input[type='range']").on("input change", (e) => {
+    elm.rangeInputs.on("input change", (e) => {
         $(e.currentTarget).next("span").text(e.currentTarget.value);
     });
 
@@ -62,9 +71,22 @@
                 maximized: elm.pxToleranceMaximized[0].value
             })
         }, () => {
-            $("body").addClass("saved");
+            elm.body.addClass(classes.saved);
             setTimeout(() => {
-                $("body").removeClass("saved");
+                elm.body.removeClass(classes.saved);
+            }, 1500);
+        });
+    });
+
+
+    elm.restoreDefaults.on("click", () => { // restore default settings
+        chrome.storage.sync.remove(["addVisual", "pxTolerance"], () => {
+            elm.body.addClass(classes.restored);
+            setTimeout(() => {
+                elm.body.removeClass(classes.restored);
+                setTimeout(() => {
+                    window.close();
+                }, 100);
             }, 1500);
         });
     });

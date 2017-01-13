@@ -33,5 +33,11 @@
   },
   "settings_saved_success": {
     "message": "Änderungen erfolgreich gespeichert"
+  },
+  "settings_restore": {
+    "message": "Einstellungen zurücksetzen"
+  },
+  "settings_restored_success": {
+    "message": "Einstellungen erfolgreich zurückgesetzt"
   }
 }

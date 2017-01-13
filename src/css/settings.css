@@ -88,8 +88,8 @@ div.box p {
 }
 
 button#save {
-  display: block;
-  margin-top: 30px;
+  display: inline-block;
+  margin-top: 50px;
   outline: none;
   border: none;
   text-shadow: none;
@@ -99,6 +99,24 @@ button#save {
   padding: 3px 12px 4px;
   border-radius: 3px;
   cursor: pointer;
+}
+
+button#restore {
+  display: inline-block;
+  outline: none;
+  border: none;
+  text-shadow: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0 7px;
+  margin-left: 15px;
+  vertical-align: middle;
+  font-size: 90%;
+  cursor: pointer;
+  transition: background 0.5s;
+}
+button#restore:hover {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 p#copyright {
@@ -113,7 +131,7 @@ div#content {
   transition: opacity 0.3s;
 }
 
-div#savedMsg {
+div#savedMsg, div#restoreMsg {
   position: fixed;
   top: calc(50% - 50px);
   left: 0;
@@ -129,11 +147,15 @@ div#savedMsg {
   transition: opacity 0.3s;
 }
 
-body.saved div#content {
+body.saved div#content, body.restored div#content {
   opacity: 0.2;
   pointer-events: none;
 }
 body.saved div#savedMsg {
+  opacity: 1;
+  pointer-events: auto;
+}
+body.restored div#restoreMsg {
   opacity: 1;
   pointer-events: auto;
 }
