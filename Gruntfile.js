@@ -37,16 +37,23 @@ module.exports = function (grunt) {
                 }]
             }
         },
+        concat: {
+            dist: {
+                options: {},
+                src: [path.src + 'js/extension.js', path.src + 'js/init.js'],
+                dest: 'tmp/extension-merged.js'
+            }
+        },
         babel: {
             dist: {
                 options: {
                     presets: ['babel-preset-es2015']
                 },
                 files: {
+                    ['tmp/extension-es5.js']: 'tmp/extension-merged.js',
                     ['tmp/jsu-es5.js']: path.src + 'js/lib/jsu.js',
-                    ['tmp/main-es5.js']: path.src + 'js/main.js',
-                    ['tmp/visual-es5.js']: path.src + 'js/visual.js',
-                    ['tmp/settings-es5.js']: path.src + 'js/settings.js'
+                    ['tmp/settings-es5.js']: path.src + 'js/settings.js',
+                    ['tmp/model-es5.js']: path.src + 'js/model.js'
                 }
             }
         },
@@ -59,10 +66,10 @@ module.exports = function (grunt) {
                     }
                 },
                 files: {
+                    ['tmp/js/extension.js']: 'tmp/extension-es5.js',
                     ['tmp/js/lib/jsu.js']: 'tmp/jsu-es5.js',
                     ['tmp/js/settings.js']: 'tmp/settings-es5.js',
-                    ['tmp/js/main.js']: 'tmp/main-es5.js',
-                    ['tmp/js/visual.js']: 'tmp/visual-es5.js'
+                    ['tmp/js/model.js']: 'tmp/model-es5.js',
                 }
             }
         },
@@ -84,6 +91,9 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     replacements: [{
+                        pattern: /("content_scripts":[\s\S]*?"js":\s?\[)([\s\S]*?)(\])/mig,
+                        replacement: '$1"js/extension.js"$3'
+                    }, {
                         pattern: /("version":[\s]*")[^"]*("[\s]*,)/ig,
                         replacement: '$1<%= pkg.version %>$2'
                     }, {
@@ -137,6 +147,7 @@ module.exports = function (grunt) {
 
     [
         'grunt-contrib-sass',
+        'grunt-contrib-concat',
         'grunt-babel',
         'grunt-contrib-uglify',
         'grunt-contrib-htmlmin',
@@ -151,6 +162,7 @@ module.exports = function (grunt) {
     grunt.registerTask('scss', ['sass:src', 'clean:sass']);
     grunt.registerTask('release', [
         'clean:distPre',
+        'concat:dist',
         'babel:dist',
         'uglify:dist',
         'htmlmin:dist',
