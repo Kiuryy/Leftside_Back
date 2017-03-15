@@ -1,4 +1,4 @@
-body > div#devblock-lsb-main {
+body > div#moonware-lsb-main {
   position: fixed;
   top: 0;
   left: 0;
@@ -8,14 +8,14 @@ body > div#devblock-lsb-main {
   padding: 0;
   z-index: 2147483644;
 }
-body > div#devblock-lsb-main.devblock-lsb-add-visual::before, body > div#devblock-lsb-main.devblock-lsb-add-visual::after {
+body > div#moonware-lsb-main.moonware-lsb-add-visual::before, body > div#moonware-lsb-main.moonware-lsb-add-visual::after {
   content: "";
   position: absolute;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s, transform 0.3s;
 }
-body > div#devblock-lsb-main.devblock-lsb-add-visual::before {
+body > div#moonware-lsb-main.moonware-lsb-add-visual::before {
   top: 0;
   left: 0;
   width: 50px;
@@ -24,7 +24,7 @@ body > div#devblock-lsb-main.devblock-lsb-add-visual::before {
   transform: translate3d(-20px, 0, 0);
   z-index: 1;
 }
-body > div#devblock-lsb-main.devblock-lsb-add-visual::after {
+body > div#moonware-lsb-main.moonware-lsb-add-visual::after {
   position: absolute;
   top: calc(50% - 20px);
   left: 15px;
@@ -35,16 +35,16 @@ body > div#devblock-lsb-main.devblock-lsb-add-visual::after {
   transform: rotateZ(-45deg) translate3d(-14px, -14px, 0);
   z-index: 2;
 }
-body > div#devblock-lsb-main.devblock-lsb-add-visual.devblock-lsb-hover::before {
+body > div#moonware-lsb-main.moonware-lsb-add-visual.moonware-lsb-hover::before {
   transform: translate3d(0, 0, 0);
   opacity: 1;
 }
-body > div#devblock-lsb-main.devblock-lsb-add-visual.devblock-lsb-hover::after {
+body > div#moonware-lsb-main.moonware-lsb-add-visual.moonware-lsb-hover::after {
   transform: rotateZ(-45deg) translate3d(0, 0, 0);
   opacity: 1;
 }
 @media print {
-  body > div#devblock-lsb-main {
+  body > div#moonware-lsb-main {
     display: none;
   }
 }

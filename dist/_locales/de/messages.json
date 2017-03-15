@@ -28,6 +28,12 @@
   "settings_add_visual_desc": {
     "message": "Zeigt einen Pfeil auf der linken Seite, sobald der Mausklick das Zurücknavigieren auslösen würde."
   },
+  "settings_close_tab": {
+    "message": "Tab schließen"
+  },
+  "settings_close_tab_desc": {
+    "message": "Schließt den aktuellen Tab wenn nicht weiter zurück navigiert werden kann."
+  },
   "settings_save": {
     "message": "Speichern"
   },

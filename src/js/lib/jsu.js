@@ -2,7 +2,7 @@
  * jsu v1.0.0-beta
  *
  * Philipp König
- * http://devblock.de
+ * https://moonware.de
  *
  */
 (() => {

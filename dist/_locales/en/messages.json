@@ -28,6 +28,12 @@
   "settings_add_visual_desc": {
     "message": "Show an arrow on the left side of the page whenever a mouse click would cause the browser to navigate back."
   },
+  "settings_close_tab": {
+    "message": "Close tab"
+  },
+  "settings_close_tab_desc": {
+    "message": "Close the current tab if you can not navigate back any further."
+  },
   "settings_save": {
     "message": "Save Changes"
   },

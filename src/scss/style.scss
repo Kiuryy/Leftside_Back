@@ -1,4 +1,4 @@
-body > div#devblock-lsb-main {
+body > div#moonware-lsb-main {
   position: fixed;
   top: 0;
   left: 0;
@@ -9,7 +9,7 @@ body > div#devblock-lsb-main {
   z-index: #{2147483647 - 3};
 
 
-  &.devblock-lsb-add-visual { // arrow on black background should be visible on hover
+  &.moonware-lsb-add-visual { // arrow on black background should be visible on hover
 
     &::before, &::after {
       content: "";
@@ -41,7 +41,7 @@ body > div#devblock-lsb-main {
       z-index: 2;
     }
 
-    &.devblock-lsb-hover { // hover
+    &.moonware-lsb-hover { // hover
 
       &::before {
         transform: translate3d(0, 0, 0);

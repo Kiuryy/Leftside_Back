@@ -3,14 +3,14 @@
 
     let opts = {
         ids: {
-            main: "devblock-lsb-main",
+            main: "moonware-lsb-main",
         },
         classes: {
-            visual: "devblock-lsb-add-visual",
-            hover: "devblock-lsb-hover"
+            visual: "moonware-lsb-add-visual",
+            hover: "moonware-lsb-hover"
         },
         events: {
-            loaded: "devblock-lsb-loaded"
+            loaded: "moonware-lsb-loaded"
         },
         config: {
             pxTolerance: {windowed: 20, maximized: 1},

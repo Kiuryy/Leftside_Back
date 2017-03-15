@@ -1,9 +1,9 @@
 {
   "name": "Leftside Back",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "license": "GPL-3.0",
   "author": "Philipp König",
-  "homepage": "http://devblock.de",
+  "homepage": "https://moonware.de",
   "devDependencies": {
     "babel-preset-es2015": "^6.18.0",
     "grunt": "^0.4.5",
