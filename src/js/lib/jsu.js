@@ -1,8 +1,8 @@
 /**
- * jsu v1.0.0-beta
+ * jsu v1.0.3
  *
  * Philipp König
- * https://moonware.de
+ * https://moonware.de/
  *
  */
 (() => {
@@ -24,13 +24,17 @@
 
                 if (reverse) {
                     for (let i = listLength - 1; i >= 0; i--) {
-                        if (callback(list[i], i) === false) {
+                        if (this[isDefined](list[i][forEach])) {
+                            this[forEach](list[i], callback, reverse);
+                        } else if (callback(list[i], i) === false) {
                             break;
                         }
                     }
                 } else {
                     for (let i = 0; i < listLength; i++) {
-                        if (callback(list[i], i) === false) {
+                        if (this[isDefined](list[i][forEach])) {
+                            this[forEach](list[i], callback, reverse);
+                        } else if (callback(list[i], i) === false) {
                             break;
                         }
                     }
@@ -154,7 +158,7 @@
                     this[nodes] = d.querySelectorAll(s);
                 } else if (s instanceof Node || s instanceof HTMLDocument || s instanceof Window) {
                     this[nodes] = [s];
-                } else if (s instanceof NodeList) {
+                } else if (s instanceof NodeList || s instanceof HTMLCollection) {
                     this[nodes] = s;
                 } else if (typeof s === "object") {
                     this[nodes] = [];
@@ -172,7 +176,7 @@
 
                         if (entry instanceof jsuNode) {
                             entry[forEach](eachCallback);
-                        } else if (entry instanceof NodeList) {
+                        } else if (Array.isArray(entry) || entry instanceof NodeList || entry instanceof HTMLCollection || /^\[object (HTMLCollection|NodeList|Object)\]$/.test(entry.toString())) {
                             h[forEach](entry, eachCallback);
                         } else {
                             this[nodes].push(entry);
