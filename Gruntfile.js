@@ -88,7 +88,7 @@ module.exports = function (grunt) {
             }
         },
         'string-replace': {
-            dist: {
+            distJs: {
                 options: {
                     replacements: [{
                         pattern: /("content_scripts":[\s\S]*?"js":\s?\[)([\s\S]*?)(\])/mig,
@@ -100,32 +100,40 @@ module.exports = function (grunt) {
                         pattern: /"version_name":[^,]*,/ig,
                         replacement: ''
                     }, {
-                        pattern: /(img\/icon\/)dev\//ig,
-                        replacement: '$1'
+                        pattern: /(img\/icon\/)dev\/(.*)\.png/ig,
+                        replacement: '$1$2.webp'
                     }]
                 },
                 files: {
                     ['tmp/manifest-parsed.json']: path.src + 'manifest.json'
+                }
+            },
+            distLocales: {
+                options: {
+                    replacements: [{
+                        pattern: /\/\/.*/ig,
+                        replacement: ''
+                    }]
+                },
+                files: {
+                    ['tmp/en.json']: path.src + '_locales/en/messages.json',
+                    ['tmp/de.json']: path.src + '_locales/de/messages.json'
                 }
             }
         },
         minjson: {
             dist: {
                 files: {
-                    [path.dist + 'manifest.json']: 'tmp/manifest-parsed.json'
+                    [path.dist + 'manifest.json']: 'tmp/manifest-parsed.json',
+                    [path.dist + '_locales/en/messages.json']: 'tmp/en.json',
+                    [path.dist + '_locales/de/messages.json']: 'tmp/de.json'
                 }
             }
         },
         copy: {
             dist: {
                 files: [
-                    {expand: true, cwd: path.src, src: ['_locales/**'], dest: path.dist},
-                    {
-                        expand: true,
-                        cwd: path.src,
-                        src: ['img/**', '!**/*.xcf', '!img/icon/dev/**', '!img/icon/icon.png', '!img/demo/**'],
-                        dest: path.dist
-                    },
+                    {expand: true, cwd: path.src, src: ['img/**', '!**/*.xcf', '!img/icon/dev/**'], dest: path.dist},
                     {expand: true, cwd: "tmp/", src: ['js/**'], dest: path.dist},
                     {expand: true, src: ['license.txt'], dest: path.dist}
                 ]
@@ -166,7 +174,8 @@ module.exports = function (grunt) {
         'babel:dist',
         'uglify:dist',
         'htmlmin:dist',
-        'string-replace:dist',
+        'string-replace:distJs',
+        'string-replace:distLocales',
         'minjson:dist',
         'sass:dist',
         'copy:dist',

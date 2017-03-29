@@ -28,12 +28,12 @@
             let val = $(elm).attr("data-i18n");
             $(elm).text(chrome.i18n.getMessage("settings_" + val));
         });
+
+        let manifest = chrome.runtime.getManifest();
+        elm.title.text(manifest.short_name + " - " + elm.title.text());
     };
 
     let initSettings = () => { // load settings
-        let manifest = chrome.runtime.getManifest();
-        elm.title.text(manifest.short_name + " - " + $("head > title").text());
-
         let createdDate = +elm.copyright.children("span.created").text();
         let currentYear = new Date().getFullYear();
 
