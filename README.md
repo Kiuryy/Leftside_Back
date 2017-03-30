@@ -2,7 +2,7 @@
 
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.svg)](http://gruntjs.com/)
 
-<img src="dist/img/icon/256x256.png" width="96" align="right" />
+<img src="dist/img/icon/256x256.webp" width="96" align="right" />
 
 Chrome extension, which allows you to navigate back by just hitting the mouse on the left side of your screen.
 
