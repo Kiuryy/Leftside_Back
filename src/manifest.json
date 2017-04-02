@@ -29,6 +29,9 @@
       "run_at": "document_start"
     }
   ],
+  "web_accessible_resources": [
+    "img/*"
+  ],
   "options_ui": {
     "page": "html/settings.html",
     "chrome_style": true

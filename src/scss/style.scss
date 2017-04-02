@@ -1,3 +1,6 @@
+@import "include/vars";
+@import "include/mixins";
+
 body > div#moonware-lsb-main {
   position: fixed;
   top: 0;
@@ -8,48 +11,35 @@ body > div#moonware-lsb-main {
   padding: 0;
   z-index: #{2147483647 - 3};
 
-
   &.moonware-lsb-add-visual { // arrow on black background should be visible on hover
 
     &::before, &::after {
       content: "";
       position: absolute;
-      pointer-events: none;
-      opacity: 0;
       transition: opacity 0.3s, transform 0.3s;
+      transform: translate3d(-$__indicatorWidth, 0, 0);
+      top: 0;
+      left: 0;
+      width: $__indicatorWidth;
+      height: 100%;
+      @extend %hidden;
     }
 
     &::before {
-      top: 0;
-      left: 0;
-      width: 50px;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      transform: translate3d(-20px, 0, 0);
+      background: $__indicatorColor;
       z-index: 1;
     }
 
     &::after {
       position: absolute;
-      top: calc(50% - 20px);
-      left: 15px;
-      width: 30px;
-      height: 30px;
-      border-top: 7px solid #fff;
-      border-left: 7px solid #fff;
-      transform: rotateZ(-45deg) translate3d(-14px, -14px, 0);
+      background: img('arrow.webp') no-repeat center / $__indicatorIconSize;
       z-index: 2;
     }
 
     &.moonware-lsb-hover { // hover
 
-      &::before {
+      &::before, &::after {
         transform: translate3d(0, 0, 0);
-        opacity: 1;
-      }
-
-      &::after {
-        transform: rotateZ(-45deg) translate3d(0, 0, 0);
         opacity: 1;
       }
     }
