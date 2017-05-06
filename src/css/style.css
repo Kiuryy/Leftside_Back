@@ -1,9 +1,9 @@
-body > div#moonware-lsb-main.moonware-lsb-add-visual::before, body > div#moonware-lsb-main.moonware-lsb-add-visual::after {
+body > div#blockbyte-lsb-main.blockbyte-lsb-add-visual::before, body > div#blockbyte-lsb-main.blockbyte-lsb-add-visual::after {
   opacity: 0;
   pointer-events: none;
 }
 
-body > div#moonware-lsb-main {
+body > div#blockbyte-lsb-main {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,7 +13,7 @@ body > div#moonware-lsb-main {
   padding: 0;
   z-index: 2147483644;
 }
-body > div#moonware-lsb-main.moonware-lsb-add-visual::before, body > div#moonware-lsb-main.moonware-lsb-add-visual::after {
+body > div#blockbyte-lsb-main.blockbyte-lsb-add-visual::before, body > div#blockbyte-lsb-main.blockbyte-lsb-add-visual::after {
   content: "";
   position: absolute;
   transition: opacity 0.3s, transform 0.3s;
@@ -23,21 +23,21 @@ body > div#moonware-lsb-main.moonware-lsb-add-visual::before, body > div#moonwar
   width: 50px;
   height: 100%;
 }
-body > div#moonware-lsb-main.moonware-lsb-add-visual::before {
+body > div#blockbyte-lsb-main.blockbyte-lsb-add-visual::before {
   background: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
-body > div#moonware-lsb-main.moonware-lsb-add-visual::after {
+body > div#blockbyte-lsb-main.blockbyte-lsb-add-visual::after {
   position: absolute;
   background: url(chrome-extension://__MSG_@@extension_id__/img/arrow.webp) no-repeat center/50px;
   z-index: 2;
 }
-body > div#moonware-lsb-main.moonware-lsb-add-visual.moonware-lsb-hover::before, body > div#moonware-lsb-main.moonware-lsb-add-visual.moonware-lsb-hover::after {
+body > div#blockbyte-lsb-main.blockbyte-lsb-add-visual.blockbyte-lsb-hover::before, body > div#blockbyte-lsb-main.blockbyte-lsb-add-visual.blockbyte-lsb-hover::after {
   transform: translate3d(0, 0, 0);
   opacity: 1;
 }
 @media print {
-  body > div#moonware-lsb-main {
+  body > div#blockbyte-lsb-main {
     display: none;
   }
 }

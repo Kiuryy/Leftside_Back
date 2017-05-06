@@ -3,7 +3,7 @@
 
     let installationDate = +new Date();
     let xhrUrls = {
-        userdata: "https://moonware.de/ajax/extensions/userdata"
+        userdata: "https://blockbyte.de/ajax/extensions/userdata"
     };
 
     /**

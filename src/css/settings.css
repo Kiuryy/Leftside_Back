@@ -37,7 +37,7 @@ section#about > div > span#copyright {
   float: right;
 }
 section#about > div > a {
-  color: #0b9abe;
+  color: #7b5fa4;
   text-decoration: none;
   font-weight: 400;
 }
@@ -95,7 +95,7 @@ button#save {
   text-shadow: none;
   box-shadow: none;
   color: #fff;
-  background: #0b9abe;
+  background: #7b5fa4;
   padding: 3px 12px 4px;
   border-radius: 3px;
   cursor: pointer;

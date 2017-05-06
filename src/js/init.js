@@ -3,14 +3,14 @@
 
     let opts = {
         ids: {
-            main: "moonware-lsb-main",
+            main: "blockbyte-lsb-main",
         },
         classes: {
-            visual: "moonware-lsb-add-visual",
-            hover: "moonware-lsb-hover"
+            visual: "blockbyte-lsb-add-visual",
+            hover: "blockbyte-lsb-hover"
         },
         events: {
-            loaded: "moonware-lsb-loaded"
+            loaded: "blockbyte-lsb-loaded"
         },
         config: {
             pxTolerance: {windowed: 20, maximized: 1},

@@ -1,7 +1,7 @@
 @import "include/vars";
 @import "include/mixins";
 
-body > div#moonware-lsb-main {
+body > div#blockbyte-lsb-main {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@ body > div#moonware-lsb-main {
   padding: 0;
   z-index: #{2147483647 - 3};
 
-  &.moonware-lsb-add-visual { // arrow on black background should be visible on hover
+  &.blockbyte-lsb-add-visual { // arrow on black background should be visible on hover
 
     &::before, &::after {
       content: "";
@@ -36,7 +36,7 @@ body > div#moonware-lsb-main {
       z-index: 2;
     }
 
-    &.moonware-lsb-hover { // hover
+    &.blockbyte-lsb-hover { // hover
 
       &::before, &::after {
         transform: translate3d(0, 0, 0);
