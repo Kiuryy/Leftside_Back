@@ -11,7 +11,7 @@ body > div#blockbyte-lsb-main {
   padding: 0;
   z-index: #{2147483647 - 3};
 
-  &.blockbyte-lsb-add-visual { // arrow on black background should be visible on hover
+  &.blockbyte-lsb-visible {
 
     &::before, &::after {
       content: "";

@@ -28,16 +28,13 @@
          * Initialises the configuration values for the extension
          */
         let initConfig = () => {
-            chrome.storage.sync.get(["pxTolerance", "addVisual", "closeTab"], (obj) => {
-                if (typeof obj.pxTolerance !== "undefined") {
-                    if (typeof obj.pxTolerance === "string" && obj.pxTolerance.search(/^\d+$/) === 0) { // backward compatibility
-                        obj.pxTolerance = "{\"windowed\":20,\"maximized\":" + obj.pxTolerance + "}";
+            let configFields = ["pxTolerance", "showIndicator", "closeTab"];
+            chrome.storage.sync.get(configFields, (obj) => {
+                configFields.forEach((field) => {
+                    if (typeof obj[field] !== "undefined") {
+                        opts.config[field] = obj[field];
                     }
-                    opts.config.pxTolerance = JSON.parse(obj.pxTolerance);
-                }
-
-                opts.config.addVisual = obj.addVisual !== "n";
-                opts.config.closeTab = typeof obj.closeTab !== "undefined" && obj.closeTab !== "n";
+                });
 
                 if (domContentLoaded) {
                     document.dispatchEvent(new CustomEvent("DOMContentLoaded"));
@@ -86,8 +83,8 @@
 
                 elm.style.width = getPixelTolerance() + "px";
 
-                if (opts.config.addVisual) { // show arrow on black background
-                    elm.classList.add(opts.classes.visual);
+                if (opts.config.showIndicator) { // show arrow on black background
+                    elm.classList.add(opts.classes.visible);
 
                     document.addEventListener("mousemove", (e) => { // check mouse position
                         if (e.pageX < getPixelTolerance()) {
@@ -119,7 +116,7 @@
             document.dispatchEvent(new CustomEvent(opts.events.loaded, {
                 detail: {
                     pxTolerance: getPixelTolerance(),
-                    addVisual: opts.config.addVisual
+                    showIndicator: opts.config.showIndicator
                 },
                 bubbles: true,
                 cancelable: false

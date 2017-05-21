@@ -16,7 +16,7 @@
         rangeInputs: $("input[type='range']"),
         pxToleranceMaximized: $("input#pxToleranceMaximized"),
         pxToleranceWindowed: $("input#pxToleranceWindowed"),
-        addVisual: $("input#addVisual"),
+        showIndicator: $("input#showIndicator"),
         closeTab: $("input#closeTab"),
         save: $("button#save"),
         restoreDefaults: $("button#restore"),
@@ -41,19 +41,19 @@
             elm.copyright.children("span.created").text(createdDate + " - " + currentYear);
         }
 
-        chrome.storage.sync.get("addVisual", (obj) => {
-            elm.addVisual[0].checked = typeof obj.addVisual === "undefined" ? true : (obj.addVisual === "y");
+        chrome.storage.sync.get("showIndicator", (obj) => {
+            elm.showIndicator[0].checked = typeof obj.showIndicator === "undefined" ? true : (obj.showIndicator === true);
         });
 
         chrome.storage.sync.get("closeTab", (obj) => {
-            elm.closeTab[0].checked = typeof obj.closeTab === "undefined" ? false : (obj.closeTab === "y");
+            elm.closeTab[0].checked = typeof obj.closeTab === "undefined" ? false : (obj.closeTab === true);
         });
 
         chrome.storage.sync.get("pxTolerance", (obj) => {
             let pxToleranceObj = {windowed: 20, maximized: 1};
 
             if (typeof obj.pxTolerance !== "undefined") {
-                pxToleranceObj = JSON.parse(obj.pxTolerance);
+                pxToleranceObj = obj.pxTolerance;
             }
 
             elm.pxToleranceMaximized[0].value = pxToleranceObj.maximized;
@@ -70,12 +70,12 @@
 
     elm.save.on("click", (e) => { // save settings
         chrome.storage.sync.set({
-            addVisual: elm.addVisual[0].checked ? "y" : "n",
-            closeTab: elm.closeTab[0].checked ? "y" : "n",
-            pxTolerance: JSON.stringify({
+            showIndicator: elm.showIndicator[0].checked,
+            closeTab: elm.closeTab[0].checked,
+            pxTolerance: {
                 windowed: elm.pxToleranceWindowed[0].value,
                 maximized: elm.pxToleranceMaximized[0].value
-            })
+            }
         }, () => {
             elm.body.addClass(classes.saved);
             setTimeout(() => {
@@ -86,7 +86,7 @@
 
 
     elm.restoreDefaults.on("click", () => { // restore default settings
-        chrome.storage.sync.remove(["addVisual", "closeTab", "pxTolerance"], () => {
+        chrome.storage.sync.remove(["showIndicator", "closeTab", "pxTolerance"], () => {
             elm.body.addClass(classes.restored);
             setTimeout(() => {
                 elm.body.removeClass(classes.restored);

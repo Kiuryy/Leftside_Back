@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title data-i18n="title">Settings</title>
+    <title data-i18n="title"></title>
     <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,500,100i,300i,500i' rel='stylesheet'
           type='text/css' />
     <link rel='stylesheet' type='text/css' href='/css/settings.css' />
@@ -21,36 +21,36 @@
 <div id="content">
 
     <div class="box">
-        <label data-i18n="px_tolerance">Tolerance in pixels</label>
-        <span class="subLabel" data-i18n="px_tolerance_maximized">Maximized</span>
+        <label data-i18n="px_tolerance"></label>
+        <span class="subLabel" data-i18n="px_tolerance_maximized"></span>
         <input type="range" id="pxToleranceMaximized" value="1" min="1" max="50" />
         <span data-unit="px"></span>
-        <span class="subLabel" data-i18n="px_tolerance_windowed">Windowed</span>
+        <span class="subLabel" data-i18n="px_tolerance_windowed"></span>
         <input type="range" id="pxToleranceWindowed" value="1" min="1" max="50" />
         <span data-unit="px"></span>
         <p data-i18n="px_tolerance_desc"></p>
     </div>
 
     <div class="box">
-        <label for="addVisual" data-i18n="add_visual">Add visual</label>
-        <input type="checkbox" id="addVisual" />
-        <p data-i18n="add_visual_desc"></p>
+        <label for="showIndicator" data-i18n="show_indicator"></label>
+        <input type="checkbox" id="showIndicator" />
+        <p data-i18n="show_indicator_desc"></p>
     </div>
 
     <div class="box">
-        <label for="closeTab" data-i18n="close_tab">Close tab</label>
+        <label for="closeTab" data-i18n="close_tab"></label>
         <input type="checkbox" id="closeTab" />
         <p data-i18n="close_tab_desc"></p>
     </div>
 
     <p>
-        <button id="save" data-i18n="save">Save Changes</button>
-        <button id="restore" data-i18n="restore">Restore Settings</button>
+        <button id="save" data-i18n="save"></button>
+        <button id="restore" data-i18n="restore"></button>
     </p>
 </div>
 
-<div id="savedMsg" data-i18n="saved_success">Changes saved successfully</div>
-<div id="restoreMsg" data-i18n="restored_success">Settings restored successfully</div>
+<div id="savedMsg" data-i18n="saved_success"></div>
+<div id="restoreMsg" data-i18n="restored_success"></div>
 
 <script src='/js/settings.js'></script>
 </body>

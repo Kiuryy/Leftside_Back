@@ -1,12 +1,10 @@
 {
-  // [ GENERAL ]
   "extension_name": {
     "message": "Leftside Back"
   },
   "extension_desc": {
     "message": "Ermöglicht das Zurücknavigieren durch Klicken am linken Bildschirmrand."
   },
-  // [ SETTINGS ]
   "settings_title": {
     "message": "Einstellungen"
   },
@@ -22,10 +20,10 @@
   "settings_px_tolerance_desc": {
     "message": "Anzahl Pixel der linken Seite, in dessen Bereich der Mausklick das Zurücknavigieren auslösen soll. Es können jeweils ein Wert für den maximierten Browser und den im Fenstermodus angegeben werden."
   },
-  "settings_add_visual": {
-    "message": "Pfeil anzeigen"
+  "settings_show_indicator": {
+    "message": "Indikator anzeigen"
   },
-  "settings_add_visual_desc": {
+  "settings_show_indicator_desc": {
     "message": "Zeigt einen Pfeil auf der linken Seite, sobald der Mausklick das Zurücknavigieren auslösen würde."
   },
   "settings_close_tab": {

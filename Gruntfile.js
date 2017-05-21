@@ -47,7 +47,7 @@ module.exports = function (grunt) {
         babel: {
             dist: {
                 options: {
-                    presets: ['babel-preset-es2015']
+                    presets: ['babel-preset-es2015', 'babel-preset-es2016', 'babel-preset-es2017']
                 },
                 files: {
                     ['tmp/extension-es5.js']: 'tmp/extension-merged.js',
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
                 options: {
                     banner: '/*! (c) <%= pkg.author %> under <%= pkg.license %> */\n',
                     mangle: {
-                        except: ['jsu']
+                        reserved: ['jsu', 'chrome']
                     }
                 },
                 files: {
@@ -88,7 +88,7 @@ module.exports = function (grunt) {
             }
         },
         'string-replace': {
-            distJs: {
+            distManifest: {
                 options: {
                     replacements: [{
                         pattern: /("content_scripts":[\s\S]*?"js":\s?\[)([\s\S]*?)(\])/mig,
@@ -105,37 +105,23 @@ module.exports = function (grunt) {
                     }]
                 },
                 files: {
-                    ['tmp/manifest-parsed.json']: path.src + 'manifest.json'
-                }
-            },
-            distLocales: {
-                options: {
-                    replacements: [{
-                        pattern: /\/\/.*/ig,
-                        replacement: ''
-                    }]
-                },
-                files: {
-                    ['tmp/en.json']: path.src + '_locales/en/messages.json',
-                    ['tmp/de.json']: path.src + '_locales/de/messages.json'
+                    ['tmp/manifest.json']: path.src + 'manifest.json'
                 }
             }
         },
-        minjson: {
+        json_minification: {
             dist: {
-                files: {
-                    [path.dist + 'manifest.json']: 'tmp/manifest-parsed.json',
-                    [path.dist + '_locales/en/messages.json']: 'tmp/en.json',
-                    [path.dist + '_locales/de/messages.json']: 'tmp/de.json'
-                }
+                files: [
+                    {expand: true, cwd: "tmp", src: ['manifest.json'], dest: path.dist},
+                    {expand: true, cwd: path.src + "_locales", src: ['**/*.json'], dest: path.dist + "_locales"}
+                ]
             }
         },
         copy: {
             dist: {
                 files: [
                     {expand: true, cwd: path.src, src: ['img/**', '!**/*.xcf', '!img/icon/dev/**'], dest: path.dist},
-                    {expand: true, cwd: "tmp/", src: ['js/**'], dest: path.dist},
-                    {expand: true, src: ['license.txt'], dest: path.dist}
+                    {expand: true, cwd: "tmp/", src: ['js/**'], dest: path.dist}
                 ]
             }
         },
@@ -160,7 +146,7 @@ module.exports = function (grunt) {
         'grunt-contrib-uglify',
         'grunt-contrib-htmlmin',
         'grunt-string-replace',
-        'grunt-minjson',
+        'grunt-json-minification',
         'grunt-contrib-copy',
         'grunt-contrib-clean'
     ].forEach((task) => {
@@ -174,13 +160,13 @@ module.exports = function (grunt) {
         'babel:dist',
         'uglify:dist',
         'htmlmin:dist',
-        'string-replace:distJs',
-        'string-replace:distLocales',
-        'minjson:dist',
+        'string-replace:distManifest',
+        'json_minification:dist',
         'sass:dist',
         'copy:dist',
         'clean:sass',
         'clean:distPost'
     ]);
 
+    // UPDATE NPM devDependencies -> 'npm update --dev --save'
 };

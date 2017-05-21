@@ -6,7 +6,7 @@
             main: "blockbyte-lsb-main",
         },
         classes: {
-            visual: "blockbyte-lsb-add-visual",
+            visible: "blockbyte-lsb-visible",
             hover: "blockbyte-lsb-hover"
         },
         events: {
@@ -14,7 +14,7 @@
         },
         config: {
             pxTolerance: {windowed: 20, maximized: 1},
-            addVisual: false,
+            showIndicator: true,
             closeTab: false
         }
     };
