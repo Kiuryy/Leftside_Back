@@ -58,7 +58,14 @@
         let initEvents = () => {
 
             document.addEventListener("mousedown", (e) => {
-                if (e.pageX < getPixelTolerance() && e.button === 0) { // check mouse position and mouse button
+                let pixelTolerance = getPixelTolerance();
+                let indicator = document.querySelector("#" + opts.ids.indicator);
+
+                if (indicator.classList.contains(opts.classes.visible) && indicator.classList.contains(opts.classes.hover) && pixelTolerance < opts.config.indicatorWidth) { // indicator is visible -> allow click across the indicator width if it is wider then the pixel tolerance
+                    pixelTolerance = opts.config.indicatorWidth;
+                }
+
+                if (e.pageX < pixelTolerance && e.button === 0) { // check mouse position and mouse button
                     let useFallback = true;
                     window.onbeforeunload = window.onpopstate = () => {
                         useFallback = false
@@ -78,7 +85,7 @@
             document.addEventListener("DOMContentLoaded", () => {
                 domContentLoaded = true;
                 let elm = document.createElement('div');
-                elm.id = opts.ids.main;
+                elm.id = opts.ids.indicator;
                 document.body.appendChild(elm);
 
                 elm.style.width = getPixelTolerance() + "px";
@@ -89,7 +96,7 @@
                     document.addEventListener("mousemove", (e) => { // check mouse position
                         if (e.pageX < getPixelTolerance()) {
                             elm.classList.add(opts.classes.hover);
-                        } else {
+                        } else if (typeof e.pageX === "undefined" || e.pageX > opts.config.indicatorWidth) {
                             elm.classList.remove(opts.classes.hover);
                         }
                     }, {passive: true});

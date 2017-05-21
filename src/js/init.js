@@ -3,7 +3,7 @@
 
     let opts = {
         ids: {
-            main: "blockbyte-lsb-main",
+            indicator: "blockbyte-lsb-indicator",
         },
         classes: {
             visible: "blockbyte-lsb-visible",
@@ -15,7 +15,8 @@
         config: {
             pxTolerance: {windowed: 20, maximized: 1},
             showIndicator: true,
-            closeTab: false
+            closeTab: false,
+            indicatorWidth: 40
         }
     };
 

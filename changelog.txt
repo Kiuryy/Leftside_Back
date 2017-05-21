@@ -1,6 +1,7 @@
 [1.4]
  - Settings extended (Close tab when history.back() not working)
  - Restructured code (added model and merged the content-scripts)
+ - Changed indicator click behaviour
 
 [1.3]
  - Removed jQuery dependency

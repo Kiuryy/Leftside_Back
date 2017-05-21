@@ -1,9 +1,9 @@
-body > div#blockbyte-lsb-main.blockbyte-lsb-visible::before, body > div#blockbyte-lsb-main.blockbyte-lsb-visible::after {
+body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible::before, body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible::after {
   opacity: 0;
   pointer-events: none;
 }
 
-body > div#blockbyte-lsb-main {
+body > div#blockbyte-lsb-indicator {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,7 +13,7 @@ body > div#blockbyte-lsb-main {
   padding: 0;
   z-index: 2147483644;
 }
-body > div#blockbyte-lsb-main.blockbyte-lsb-visible::before, body > div#blockbyte-lsb-main.blockbyte-lsb-visible::after {
+body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible::before, body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible::after {
   content: "";
   position: absolute;
   transition: opacity 0.3s, transform 0.3s;
@@ -23,21 +23,21 @@ body > div#blockbyte-lsb-main.blockbyte-lsb-visible::before, body > div#blockbyt
   width: 40px;
   height: 100%;
 }
-body > div#blockbyte-lsb-main.blockbyte-lsb-visible::before {
+body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible::before {
   background: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
-body > div#blockbyte-lsb-main.blockbyte-lsb-visible::after {
+body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible::after {
   position: absolute;
   background: url(chrome-extension://__MSG_@@extension_id__/img/arrow.webp) no-repeat center/32px;
   z-index: 2;
 }
-body > div#blockbyte-lsb-main.blockbyte-lsb-visible.blockbyte-lsb-hover::before, body > div#blockbyte-lsb-main.blockbyte-lsb-visible.blockbyte-lsb-hover::after {
+body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible.blockbyte-lsb-hover::before, body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible.blockbyte-lsb-hover::after {
   transform: translate3d(0, 0, 0);
   opacity: 1;
 }
 @media print {
-  body > div#blockbyte-lsb-main {
+  body > div#blockbyte-lsb-indicator {
     display: none;
   }
 }
