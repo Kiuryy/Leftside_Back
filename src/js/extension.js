@@ -78,37 +78,45 @@
                     }, 200);
                 }
             }, {passive: true});
+
+            document.addEventListener("DOMContentLoaded", () => {
+                initIndicator();
+            });
         };
 
+        /**
+         * Initialises the indicator
+         */
         let initIndicator = () => {
-            let elm = document.createElement('div');
-            elm.id = opts.ids.indicator;
-            document.body.appendChild(elm);
+            if (document && document.body && document.querySelector("#" + opts.ids.indicator) === null) { // prevent if document is not ready yet or indicator is already initialised
+                let elm = document.createElement('div');
+                elm.id = opts.ids.indicator;
+                document.body.appendChild(elm);
 
-            elm.style.width = getPixelTolerance() + "px";
+                elm.style.width = getPixelTolerance() + "px";
 
-            if (opts.config.showIndicator) { // show arrow on black background
-                elm.classList.add(opts.classes.visible);
+                if (opts.config.showIndicator) { // show arrow on black background
+                    elm.classList.add(opts.classes.visible);
 
-                document.addEventListener("mousemove", (e) => { // check mouse position
-                    if (e.pageX < getPixelTolerance()) {
-                        elm.classList.add(opts.classes.hover);
-                    } else if (typeof e.pageX === "undefined" || e.pageX > opts.config.indicatorWidth) {
-                        elm.classList.remove(opts.classes.hover);
-                    }
-                }, {passive: true});
+                    document.addEventListener("mousemove", (e) => { // check mouse position
+                        if (e.pageX < getPixelTolerance()) {
+                            elm.classList.add(opts.classes.hover);
+                        } else if (typeof e.pageX === "undefined" || e.pageX > opts.config.indicatorWidth) {
+                            elm.classList.remove(opts.classes.hover);
+                        }
+                    }, {passive: true});
 
-                document.addEventListener("visibilitychange", () => {
-                    if (document.hidden) {
-                        elm.classList.remove(opts.classes.hover);
-                    }
-                });
+                    document.addEventListener("visibilitychange", () => {
+                        if (document.hidden) {
+                            elm.classList.remove(opts.classes.hover);
+                        }
+                    });
 
-                window.addEventListener("resize", () => {
-                    elm.style.width = getPixelTolerance() + "px";
-                }, {passive: true});
+                    window.addEventListener("resize", () => {
+                        elm.style.width = getPixelTolerance() + "px";
+                    }, {passive: true});
+                }
             }
-
         };
 
         /**
