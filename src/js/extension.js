@@ -22,7 +22,6 @@
          * PRIVATE
          * ################################
          */
-        let domContentLoaded = false;
 
         /**
          * Initialises the configuration values for the extension
@@ -36,9 +35,8 @@
                     }
                 });
 
-                if (domContentLoaded) {
-                    document.dispatchEvent(new CustomEvent("DOMContentLoaded"));
-                }
+                initIndicator();
+                extensionLoaded();
             });
         };
 
@@ -80,40 +78,37 @@
                     }, 200);
                 }
             }, {passive: true});
+        };
 
+        let initIndicator = () => {
+            let elm = document.createElement('div');
+            elm.id = opts.ids.indicator;
+            document.body.appendChild(elm);
 
-            document.addEventListener("DOMContentLoaded", () => {
-                domContentLoaded = true;
-                let elm = document.createElement('div');
-                elm.id = opts.ids.indicator;
-                document.body.appendChild(elm);
+            elm.style.width = getPixelTolerance() + "px";
 
-                elm.style.width = getPixelTolerance() + "px";
+            if (opts.config.showIndicator) { // show arrow on black background
+                elm.classList.add(opts.classes.visible);
 
-                if (opts.config.showIndicator) { // show arrow on black background
-                    elm.classList.add(opts.classes.visible);
+                document.addEventListener("mousemove", (e) => { // check mouse position
+                    if (e.pageX < getPixelTolerance()) {
+                        elm.classList.add(opts.classes.hover);
+                    } else if (typeof e.pageX === "undefined" || e.pageX > opts.config.indicatorWidth) {
+                        elm.classList.remove(opts.classes.hover);
+                    }
+                }, {passive: true});
 
-                    document.addEventListener("mousemove", (e) => { // check mouse position
-                        if (e.pageX < getPixelTolerance()) {
-                            elm.classList.add(opts.classes.hover);
-                        } else if (typeof e.pageX === "undefined" || e.pageX > opts.config.indicatorWidth) {
-                            elm.classList.remove(opts.classes.hover);
-                        }
-                    }, {passive: true});
+                document.addEventListener("visibilitychange", () => {
+                    if (document.hidden) {
+                        elm.classList.remove(opts.classes.hover);
+                    }
+                });
 
-                    document.addEventListener("visibilitychange", () => {
-                        if (document.hidden) {
-                            elm.classList.remove(opts.classes.hover);
-                        }
-                    });
+                window.addEventListener("resize", () => {
+                    elm.style.width = getPixelTolerance() + "px";
+                }, {passive: true});
+            }
 
-                    window.addEventListener("resize", () => {
-                        elm.style.width = getPixelTolerance() + "px";
-                    }, {passive: true});
-                }
-
-                extensionLoaded();
-            });
         };
 
         /**
