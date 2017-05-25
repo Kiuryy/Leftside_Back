@@ -28,7 +28,6 @@
         let initConfig = () => {
             let configFields = ["pxTolerance", "showIndicator", "closeTab", "openAction"];
             chrome.storage.sync.get(configFields, (obj) => {
-                console.log(obj);
                 configFields.forEach((field) => {
                     if (typeof obj[field] !== "undefined") {
                         opts.config[field] = obj[field];

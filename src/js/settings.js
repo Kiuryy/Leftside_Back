@@ -92,7 +92,7 @@
 
 
     elm.restoreDefaults.on("click", () => { // restore default settings
-        chrome.storage.sync.remove(["showIndicator", "closeTab", "pxTolerance"], () => {
+        chrome.storage.sync.remove(["showIndicator", "closeTab", "pxTolerance", "openAction"], () => {
             elm.body.addClass(classes.restored);
             setTimeout(() => {
                 elm.body.removeClass(classes.restored);
