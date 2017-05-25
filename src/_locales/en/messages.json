@@ -20,6 +20,18 @@
   "settings_px_tolerance_desc": {
     "message": "Amount of pixels from the left side of every page, in which a mouse click will cause the browser to navigate back. You can choose different values for maximized and windowed browser frame."
   },
+  "settings_open_action": {
+    "message": "Navigate back"
+  },
+  "settings_open_action_desc": {
+    "message": "Navigate back by left or right click."
+  },
+  "settings_open_action_leftclick": {
+    "message": "Left click"
+  },
+  "settings_open_action_rightclick": {
+    "message": "Right click"
+  },
   "settings_show_indicator": {
     "message": "Show indicator"
   },

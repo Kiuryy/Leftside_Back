@@ -14,7 +14,6 @@
          */
         this.run = () => {
             initConfig();
-            initEvents();
         };
 
         /*
@@ -27,14 +26,16 @@
          * Initialises the configuration values for the extension
          */
         let initConfig = () => {
-            let configFields = ["pxTolerance", "showIndicator", "closeTab"];
+            let configFields = ["pxTolerance", "showIndicator", "closeTab", "openAction"];
             chrome.storage.sync.get(configFields, (obj) => {
+                console.log(obj);
                 configFields.forEach((field) => {
                     if (typeof obj[field] !== "undefined") {
                         opts.config[field] = obj[field];
                     }
                 });
 
+                initEvents();
                 initIndicator();
                 extensionLoaded();
             });
@@ -55,29 +56,34 @@
          */
         let initEvents = () => {
 
-            document.addEventListener("mousedown", (e) => {
-                let pixelTolerance = getPixelTolerance();
-                let indicator = document.querySelector("#" + opts.ids.indicator);
+            document.addEventListener(opts.config.openAction, (e) => {
+                if (e.isTrusted) {
+                    let pixelTolerance = getPixelTolerance();
+                    let indicator = document.querySelector("#" + opts.ids.indicator);
 
-                if (indicator.classList.contains(opts.classes.visible) && indicator.classList.contains(opts.classes.hover) && pixelTolerance < opts.config.indicatorWidth) { // indicator is visible -> allow click across the indicator width if it is wider then the pixel tolerance
-                    pixelTolerance = opts.config.indicatorWidth;
+                    if (indicator.classList.contains(opts.classes.visible) && indicator.classList.contains(opts.classes.hover) && pixelTolerance < opts.config.indicatorWidth) { // indicator is visible -> allow click across the indicator width if it is wider then the pixel tolerance
+                        pixelTolerance = opts.config.indicatorWidth;
+                    }
+
+                    if (e.pageX < pixelTolerance && (opts.config.openAction !== "mousedown" || e.button === 0)) { // check mouse position and mouse button
+                        e.stopPropagation();
+                        e.preventDefault();
+
+                        let useFallback = true;
+                        window.onbeforeunload = window.onpopstate = () => {
+                            useFallback = false
+                        };
+
+                        window.history.back();
+
+                        setTimeout(() => {
+                            if (opts.config.closeTab && useFallback) {
+                                chrome.extension.sendMessage({type: "closeTab"});
+                            }
+                        }, 200);
+                    }
                 }
-
-                if (e.pageX < pixelTolerance && e.button === 0) { // check mouse position and mouse button
-                    let useFallback = true;
-                    window.onbeforeunload = window.onpopstate = () => {
-                        useFallback = false
-                    };
-
-                    window.history.back();
-
-                    setTimeout(() => {
-                        if (opts.config.closeTab && useFallback) {
-                            chrome.extension.sendMessage({type: "closeTab"});
-                        }
-                    }, 200);
-                }
-            }, {passive: true});
+            });
 
             document.addEventListener("DOMContentLoaded", () => {
                 initIndicator();

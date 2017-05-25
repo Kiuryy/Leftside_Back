@@ -17,6 +17,7 @@
         pxToleranceMaximized: $("input#pxToleranceMaximized"),
         pxToleranceWindowed: $("input#pxToleranceWindowed"),
         showIndicator: $("input#showIndicator"),
+        openAction: $("select#openAction"),
         closeTab: $("input#closeTab"),
         save: $("button#save"),
         restoreDefaults: $("button#restore"),
@@ -49,6 +50,10 @@
             elm.closeTab[0].checked = typeof obj.closeTab === "undefined" ? false : (obj.closeTab === true);
         });
 
+        chrome.storage.sync.get("openAction", (obj) => {
+            elm.openAction[0].value = typeof obj.openAction === "undefined" ? "mousedown" : obj.openAction;
+        });
+
         chrome.storage.sync.get("pxTolerance", (obj) => {
             let pxToleranceObj = {windowed: 20, maximized: 1};
 
@@ -72,6 +77,7 @@
         chrome.storage.sync.set({
             showIndicator: elm.showIndicator[0].checked,
             closeTab: elm.closeTab[0].checked,
+            openAction: elm.openAction[0].value,
             pxTolerance: {
                 windowed: elm.pxToleranceWindowed[0].value,
                 maximized: elm.pxToleranceMaximized[0].value

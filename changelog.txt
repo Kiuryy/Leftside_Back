@@ -1,3 +1,6 @@
+[1.5]
+ - Extended configuration
+
 [1.4]
  - Settings extended (Close tab when history.back() not working)
  - Restructured code (added model and merged the content-scripts)

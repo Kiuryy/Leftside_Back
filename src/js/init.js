@@ -14,6 +14,7 @@
         },
         config: {
             pxTolerance: {windowed: 20, maximized: 1},
+            openAction: "mousedown",
             showIndicator: true,
             closeTab: false,
             indicatorWidth: 40
