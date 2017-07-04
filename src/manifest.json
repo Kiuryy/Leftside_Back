@@ -6,10 +6,11 @@
   "default_locale": "en",
   "version": "0.0.1",
   "version_name": "Dev",
-  "minimum_chrome_version": "55",
+  "minimum_chrome_version": "58",
+  "homepage_url": "https://blockbyte.de/extensions",
   "background": {
     "scripts": [
-      "js/model.js"
+      "js/background.js"
     ],
     "persistent": false
   },
@@ -23,8 +24,7 @@
         "js/init.js"
       ],
       "matches": [
-        "http://*/*",
-        "https://*/*"
+        "<all_urls>"
       ],
       "run_at": "document_start"
     }

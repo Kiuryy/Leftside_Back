@@ -1,0 +1,2 @@
+/*! (c) Philipp König under GPL-3.0 */
+(()=>{"use strict";let e=+new Date,t={closeTab:(e,t)=>{chrome.tabs.query({active:!0,currentWindow:!0},e=>{chrome.tabs.remove(e[0].id)})}};chrome.extension.onMessage.addListener((e,a,n)=>(t[e.type]&&t[e.type](e,n),!0)),chrome.storage.sync.get(["installationDate"],t=>{void 0===t.installationDate?(e=+new Date,chrome.storage.sync.set({installationDate:e})):e=t.installationDate})})();

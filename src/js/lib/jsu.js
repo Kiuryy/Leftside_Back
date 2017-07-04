@@ -1,5 +1,5 @@
 /**
- * jsu v1.0.3
+ * jsu v1.1.0
  *
  * Philipp König
  * https://blockbyte.de/
@@ -13,6 +13,9 @@
     let forEach = "forEach";
     // <<< Global Methods
 
+    /**
+     * jsuHelper
+     */
     let jsuHelper = (() => {
         return class {
             static [isDefined](v) {
@@ -41,6 +44,30 @@
                 }
             }
         }
+    })();
+
+    /**
+     * jsuTools
+     */
+    let jsuTools = (() => {
+
+        // >>> Methods
+        let delay = "delay";
+        // <<< Methods
+
+        return {
+            /**
+             * Promise for a delay of the given duration
+             *
+             * @param {int} t
+             * @returns {Promise}
+             */
+            [delay]: (t = 0) => {
+                return new Promise((resolve) => {
+                    setTimeout(resolve, t)
+                });
+            }
+        };
     })();
 
 
@@ -214,7 +241,7 @@
              * @returns {mixed|jsuNode}
              */
             [css](opts, val) {
-                let isSetter = true;
+                let isSetter = false;
                 let hasOpts = h[isDefined](opts);
                 let hasVal = h[isDefined](val);
                 let ret = [];
@@ -222,11 +249,12 @@
                 this[forEach]((node) => {
                     if (hasOpts && hasVal && typeof opts === "string") { // set
                         node.style[opts] = val;
+                        isSetter = true;
                     } else if (hasOpts) {
                         if (typeof opts === "string") { // get specific
                             ret.push(window.getComputedStyle(node)[opts]);
-                            isSetter = false;
                         } else if (typeof opts === "object") { // set by object
+                            isSetter = true;
                             Object.keys(opts)[forEach]((key) => {
                                 if (typeof key === "string") {
                                     node.style[key] = opts[key];
@@ -252,13 +280,14 @@
              * @returns {mixed|jsuNode}
              */
             [attr](opts, val) {
-                let isSetter = true;
+                let isSetter = false;
                 let hasOpts = h[isDefined](opts);
                 let hasVal = h[isDefined](val);
                 let ret = [];
 
                 this[forEach]((node) => {
                     let setAttr = (key, val) => {
+                        isSetter = true;
                         if (h[isDefined](node[key])) {
                             node[key] = val;
                         } else {
@@ -276,7 +305,6 @@
                     } else if (hasOpts) {
                         if (typeof opts === "string") { // get specific
                             ret.push(getAttr(opts));
-                            isSetter = false;
                         } else if (typeof opts === "object") { // set by object
                             Object.keys(opts)[forEach]((key) => {
                                 if (typeof key === "string") {
@@ -442,7 +470,7 @@
              * @returns {mixed|jsuNode}
              */
             [data](key, val) {
-                let isSetter = true;
+                let isSetter = false;
                 let hasKey = h[isDefined](key);
                 let hasVal = h[isDefined](val);
                 let ret = [];
@@ -452,13 +480,14 @@
                     let hasData = h[isDefined](elmDataList);
 
                     if (hasKey && hasVal) { // set
+                        isSetter = true;
                         jsuNode[private_addData](node, key, val);
                     } else if (hasKey) {
-
                         if (typeof key === "string") { // get specific
                             ret.push(hasData ? elmDataList[key] : undefined);
-                            isSetter = false;
+
                         } else if (typeof key === "object") { // set by object
+                            isSetter = true;
                             Object.keys(key)[forEach]((k) => {
                                 if (typeof k === "string") {
                                     jsuNode[private_addData](node, k, key[k]);
@@ -467,7 +496,6 @@
                         }
                     } else { // get all
                         ret.push(hasData ? elmDataList : {});
-                        isSetter = false;
                     }
                 });
 
@@ -515,7 +543,6 @@
              * @returns {jsuNode}
              */
             [on](eventStr, callbackOrElm, callbackOrOpts, optsOrWantsUntrusted, wantsUntrusted) {
-                let x = 0;
                 let updateEventObject = (e, overrideObj) => {
                     Object.keys(overrideObj)[forEach]((key) => {
                         try {
@@ -782,6 +809,10 @@
              */
             [children](selector) {
                 let ret = [];
+                if (!selector) {
+                    selector = "*";
+                }
+
                 this[forEach]((node) => {
                     ret.push(node.querySelectorAll(":scope > " + selector));
                 });
@@ -1249,9 +1280,17 @@
         }
     })(jsuHelper);
 
+    /**
+     * Bind jsu to window object
+     */
+    (() => {
+        let obj = s => new jsuNode(s);
 
-    window.jsu = function (s) {
-        return new jsuNode(s);
-    }
+        Object.entries(jsuTools).forEach(([name, func]) => { // append tools
+            obj[name] = func;
+        });
+
+        window.jsu = obj;
+    })();
 
 })();
