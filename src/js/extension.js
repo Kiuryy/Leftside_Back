@@ -3,6 +3,8 @@
 
     window.ext = function (opts) {
 
+        let mouseNotTopLeft = false;
+
         /*
          * ################################
          * PUBLIC
@@ -47,40 +49,30 @@
          */
         let getPixelTolerance = () => {
             let isWindowed = window.screenX !== 0 || window.screenY !== 0 || window.screen.availWidth !== window.innerWidth;
-            return opts.config.pxTolerance[isWindowed ? "windowed" : "maximized"];
+            return +opts.config.pxTolerance[isWindowed ? "windowed" : "maximized"];
         };
 
         /**
          * Initialises the eventhandlers
          */
         let initEvents = () => {
-
             document.addEventListener(opts.config.openAction, (e) => {
-                if (e.isTrusted) {
-                    let pixelTolerance = getPixelTolerance();
-                    let indicator = document.querySelector("#" + opts.ids.indicator);
+                if (e.isTrusted && (opts.config.openAction !== "mousedown" || e.button === 0) && isMousePosInPixelTolerance(e.pageX, e.pageY)) { // check mouse position and mouse button
+                    e.stopPropagation();
+                    e.preventDefault();
 
-                    if (indicator.classList.contains(opts.classes.visible) && indicator.classList.contains(opts.classes.hover) && pixelTolerance < opts.config.indicatorWidth) { // indicator is visible -> allow click across the indicator width if it is wider then the pixel tolerance
-                        pixelTolerance = opts.config.indicatorWidth;
-                    }
+                    let useFallback = true;
+                    window.onbeforeunload = window.onpopstate = () => {
+                        useFallback = false
+                    };
 
-                    if (e.pageX < pixelTolerance && (opts.config.openAction !== "mousedown" || e.button === 0)) { // check mouse position and mouse button
-                        e.stopPropagation();
-                        e.preventDefault();
+                    window.history.back();
 
-                        let useFallback = true;
-                        window.onbeforeunload = window.onpopstate = () => {
-                            useFallback = false
-                        };
-
-                        window.history.back();
-
-                        setTimeout(() => {
-                            if (opts.config.closeTab && useFallback) {
-                                chrome.extension.sendMessage({type: "closeTab"});
-                            }
-                        }, 200);
-                    }
+                    setTimeout(() => {
+                        if (opts.config.closeTab && useFallback) {
+                            chrome.extension.sendMessage({type: "closeTab"});
+                        }
+                    }, 200);
                 }
             });
 
@@ -104,12 +96,12 @@
                     elm.classList.add(opts.classes.visible);
 
                     document.addEventListener("mousemove", (e) => { // check mouse position
-                        if (e.pageX < getPixelTolerance()) {
+                        if (e.isTrusted && isMousePosInPixelTolerance(e.pageX, e.pageY)) {
                             elm.classList.add(opts.classes.hover);
-                        } else if (typeof e.pageX === "undefined" || e.pageX > opts.config.indicatorWidth) {
+                        } else if (typeof e.pageX === "undefined" || e.pageX >= opts.config.indicatorWidth) {
                             elm.classList.remove(opts.classes.hover);
                         }
-                    }, {passive: true});
+                    });
 
                     document.addEventListener("visibilitychange", () => {
                         if (document.hidden) {
@@ -122,6 +114,33 @@
                     }, {passive: true});
                 }
             }
+        };
+
+        /**
+         * Checks whether the given mouse position is in the configured pixel tolence
+         *
+         * @param {int} pageX
+         * @param {int} pageY
+         * @returns {boolean}
+         */
+        let isMousePosInPixelTolerance = (pageX, pageY) => {
+            let ret = false;
+            if (typeof pageX !== "undefined" && pageX !== null) {
+                if ((pageX > 0 || pageY > 0) || mouseNotTopLeft) { // protection from unwanted triggers with x = 0 and y = 0 on pageload
+                    mouseNotTopLeft = true;
+
+                    let pixelTolerance = getPixelTolerance();
+                    let indicator = document.querySelector("#" + opts.ids.indicator);
+
+                    if (indicator.classList.contains(opts.classes.visible) && indicator.classList.contains(opts.classes.hover) && opts.config.indicatorWidth > pixelTolerance) { // indicator is visible -> allow click across the indicator width if it is wider then the pixel tolerance
+                        pixelTolerance = opts.config.indicatorWidth;
+                    }
+
+                    ret = pageX < pixelTolerance;
+                }
+            }
+
+            return ret;
         };
 
         /**
