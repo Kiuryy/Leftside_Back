@@ -128,15 +128,16 @@
             if (typeof pageX !== "undefined" && pageX !== null) {
                 if ((pageX > 0 || pageY > 0) || mouseNotTopLeft) { // protection from unwanted triggers with x = 0 and y = 0 on pageload
                     mouseNotTopLeft = true;
-
-                    let pixelTolerance = getPixelTolerance();
                     let indicator = document.querySelector("#" + opts.ids.indicator);
 
-                    if (indicator.classList.contains(opts.classes.visible) && indicator.classList.contains(opts.classes.hover) && opts.config.indicatorWidth > pixelTolerance) { // indicator is visible -> allow click across the indicator width if it is wider then the pixel tolerance
-                        pixelTolerance = opts.config.indicatorWidth;
-                    }
+                    if (indicator) { // indicator is existing
+                        let pixelTolerance = getPixelTolerance();
+                        if (indicator.classList.contains(opts.classes.visible) && indicator.classList.contains(opts.classes.hover) && opts.config.indicatorWidth > pixelTolerance) { // indicator is visible -> allow click across the indicator width if it is wider then the pixel tolerance
+                            pixelTolerance = opts.config.indicatorWidth;
+                        }
 
-                    ret = pageX < pixelTolerance;
+                        ret = pageX < pixelTolerance;
+                    }
                 }
             }
 
