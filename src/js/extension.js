@@ -36,6 +36,12 @@
                     }
                 });
 
+                if (matchMedia("(min-resolution: 1.25dppx)").matches) { // hdpi monitor -> increase pixel tolerance by one
+                    Object.keys(opts.config.pxTolerance).forEach((key) => {
+                        opts.config.pxTolerance[key]++;
+                    });
+                }
+
                 initEvents();
                 initIndicator();
                 extensionLoaded();
