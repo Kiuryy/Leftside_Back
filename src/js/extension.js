@@ -3,6 +3,8 @@
 
     window.ext = function (opts) {
 
+        let port = null;
+        let callbacks = {};
         let mouseNotTopLeft = false;
 
         /*
@@ -11,11 +13,15 @@
          * ################################
          */
 
+        this.initialized = null;
+
         /**
          * Constructor
          */
         this.run = () => {
+            initPort();
             initConfig();
+            this.initialized = +new Date();
         };
 
         /*
@@ -59,6 +65,74 @@
         };
 
         /**
+         * Initialises the port to the background script
+         *
+         * @returns {Promise}
+         */
+        let initPort = () => {
+            return new Promise((resolve) => {
+                if (port) {
+                    port.disconnect();
+                }
+
+                port = chrome.runtime.connect({name: "background"});
+
+                port.onMessage.addListener((obj) => {
+                    if (callbacks[obj.uid]) {
+                        callbacks[obj.uid](obj.result);
+                        delete callbacks[obj.uid];
+                    }
+                });
+
+                resolve();
+            });
+        };
+
+        /**
+         * Sends a message to the background script and resolves when receiving a response
+         *
+         * @param {string} key
+         * @param {object} opts
+         * @returns {Promise}
+         */
+        let sendMessage = (key, opts = {}) => {
+            return new Promise((resolve) => {
+                if (port) {
+                    opts.type = key;
+                    opts.uid = key + "_" + JSON.stringify(opts) + "_" + (+new Date()) + Math.random().toString(36).substr(2, 12);
+
+                    callbacks[opts.uid] = (response) => {
+                        resolve(response);
+                    };
+
+                    try { // can fail if port is closed in the meantime
+                        port.postMessage(opts);
+                    } catch (e) {
+                    }
+                }
+            });
+        };
+
+        /**
+         * Performs the action,
+         * navigates back in history or closes the tab if there is no other history entry
+         */
+        let performAction = () => {
+            let useFallback = true;
+            window.onbeforeunload = window.onpopstate = () => {
+                useFallback = false
+            };
+
+            window.history.back();
+
+            setTimeout(() => {
+                if (opts.config.closeTab && useFallback) {
+                    sendMessage("closeTab");
+                }
+            }, 200);
+        };
+
+        /**
          * Initialises the eventhandlers
          */
         let initEvents = () => {
@@ -66,24 +140,20 @@
                 if (e.isTrusted && (opts.config.openAction !== "mousedown" || e.button === 0) && isMousePosInPixelTolerance(e.pageX, e.pageY)) { // check mouse position and mouse button
                     e.stopPropagation();
                     e.preventDefault();
-
-                    let useFallback = true;
-                    window.onbeforeunload = window.onpopstate = () => {
-                        useFallback = false
-                    };
-
-                    window.history.back();
-
-                    setTimeout(() => {
-                        if (opts.config.closeTab && useFallback) {
-                            chrome.extension.sendMessage({type: "closeTab"});
-                        }
-                    }, 200);
+                    performAction();
                 }
             });
 
             document.addEventListener("DOMContentLoaded", () => {
                 initIndicator();
+            });
+
+            chrome.extension.onMessage.addListener((message) => { // listen for events from the background script
+                if (message && message.action && (message.reinitialized === null || this.initialized > message.reinitialized)) { // background is not reinitialized after the creation of this instance of the script -> perform the action
+                    if (message.action === "navigateBack") { //
+                        performAction();
+                    }
+                }
             });
         };
 

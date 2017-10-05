@@ -30,10 +30,6 @@ section#about {
     width: 660px; }
     section#about > div > span#copyright {
       float: right; }
-    section#about > div > a {
-      color: #7b5fa4;
-      text-decoration: none;
-      font-weight: 400; }
 
 div.box {
   margin-top: 30px; }

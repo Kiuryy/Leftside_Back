@@ -1,3 +1,6 @@
+[tbd]
+ - load jsu for extension -> easier to implement destroy mechanism
+
 [1.5]
  - Replaced gruntjs with npm scripts
  - Extended configuration
