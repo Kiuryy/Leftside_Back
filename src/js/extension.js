@@ -164,6 +164,7 @@
             if (document && document.body && document.querySelector("#" + opts.ids.indicator) === null) { // prevent if document is not ready yet or indicator is already initialised
                 let elm = document.createElement('div');
                 elm.id = opts.ids.indicator;
+                elm.innerHTML = "<div><span></span></div>";
                 document.body.appendChild(elm);
 
                 elm.style.width = getPixelTolerance() + "px";

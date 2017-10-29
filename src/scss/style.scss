@@ -13,34 +13,34 @@ body > div#blockbyte-lsb-indicator {
 
   &.blockbyte-lsb-visible {
 
-    &::before, &::after {
-      content: "";
+    > div {
       position: absolute;
-      transition: opacity 0.3s, transform 0.3s;
       transform: translate3d(-$__indicatorWidth, 0, 0);
       top: 0;
       left: 0;
-      width: $__indicatorWidth;
+      width: $__indicatorWidth !important;
       height: 100%;
-      @extend %hidden;
-    }
-
-    &::before {
       background: $__indicatorColor;
-      z-index: 1;
-    }
-
-    &::after {
-      position: absolute;
-      background: img('arrow.webp') no-repeat center / $__indicatorIconSize;
+      transition: opacity 0.3s, transform 0.3s;
       z-index: 2;
-    }
+      @extend %hidden;
 
+      > span {
+        background: img('arrow.webp') no-repeat center / $__indicatorIconSize;
+        z-index: 2;
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
     &.blockbyte-lsb-hover { // hover
 
-      &::before, &::after {
+      > div {
         transform: translate3d(0, 0, 0);
-        opacity: 1;
+        @extend %visible;
       }
     }
   }
