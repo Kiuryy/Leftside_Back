@@ -94,6 +94,7 @@
                                         result: result
                                     });
                                 } catch (e) {
+                                    //
                                 }
                             });
                         }
@@ -136,7 +137,7 @@
          */
         this.run = () => {
             let manifest = chrome.runtime.getManifest();
-            this.isDev = manifest.version_name === "Dev" || !('update_url' in manifest);
+            this.isDev = manifest.version_name === "Dev" || !("update_url" in manifest);
             let start = +new Date();
 
             Promise.all([

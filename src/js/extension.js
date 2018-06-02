@@ -108,6 +108,7 @@
                     try { // can fail if port is closed in the meantime
                         port.postMessage(opts);
                     } catch (e) {
+                        //
                     }
                 }
             });
@@ -120,7 +121,7 @@
         let performAction = () => {
             let useFallback = true;
             window.onbeforeunload = window.onpopstate = () => {
-                useFallback = false
+                useFallback = false;
             };
 
             window.history.back();
@@ -162,7 +163,7 @@
          */
         let initIndicator = () => {
             if (document && document.body && document.querySelector("#" + opts.ids.indicator) === null) { // prevent if document is not ready yet or indicator is already initialised
-                let elm = document.createElement('div');
+                let elm = document.createElement("div");
                 elm.id = opts.ids.indicator;
                 elm.innerHTML = "<div><span></span></div>";
                 document.body.appendChild(elm);

@@ -73,9 +73,9 @@
                         maximized: this.opts.elm.pxToleranceMaximized[0].value
                     }
                 }, () => {
-                    this.opts.elm.body.addClass(classes.saved);
+                    this.opts.elm.body.addClass(this.opts.classes.saved);
                     setTimeout(() => {
-                        this.opts.elm.body.removeClass(classes.saved);
+                        this.opts.elm.body.removeClass(this.opts.classes.saved);
                     }, 1500);
                 });
             });
@@ -83,9 +83,9 @@
 
             this.opts.elm.restoreDefaults.on("click", () => { // restore default settings
                 chrome.storage.sync.remove(["showIndicator", "closeTab", "pxTolerance", "openAction"], () => {
-                    this.opts.elm.body.addClass(classes.restored);
+                    this.opts.elm.body.addClass(this.opts.classes.restored);
                     setTimeout(() => {
-                        this.opts.elm.body.removeClass(classes.restored);
+                        this.opts.elm.body.removeClass(this.opts.classes.restored);
                         setTimeout(() => {
                             window.close();
                         }, 100);
