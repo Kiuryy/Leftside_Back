@@ -1,24 +1,21 @@
 @import "include/vars";
 @import "include/mixins";
 
-* {
+*, *::after, *::before {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 body {
-  margin: 10px auto 20px;
-  padding: 20px;
+  margin: 0 auto;
   font-size: $baseFontSize;
   font-family: $baseFontFamily;
   font-weight: $baseFontWeight;
+  background: $settingsBackgroundColor;
   color: $textColor;
   width: 720px;
-}
-
-strong {
-  font-weight: 400;
 }
 
 section#about {
@@ -26,119 +23,130 @@ section#about {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 3px 20px;
-  font-size: 90%;
-  background: $settingsAboutBackground;
-  border-bottom: 1px solid #d3d3d3;
+  padding: 0 15px 5px;
+  font-size: 80%;
+  text-align: right;
+  background: $settingsBackgroundColor;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 2;
 
-  > div {
-    margin: 0 auto;
-    width: 660px;
-
-    > span#copyright {
-      float: right;
-    }
-  }
-}
-
-div.box {
-  margin-top: 30px;
-
-  label {
-    display: inline-block;
-    vertical-align: top;
+  > a {
+    color: $textColor;
+    text-decoration: none;
     font-weight: 400;
-    margin-right: 15px;
-  }
-
-  input {
-    display: inline-block;
-    vertical-align: top;
-
-    &[type='checkbox'] {
-      margin-top: 3px;
-    }
-  }
-
-  select {
-    display: inline-block;
-    vertical-align: top;
-    margin-top: -4px;
-  }
-
-  span.subLabel {
-    display: inline-block;
-    vertical-align: top;
-    font-style: italic;
-    margin: 0 10px 0 20px;
-  }
-
-  label + span.subLabel {
-    margin-left: 0;
-  }
-
-  input[type='range'] + span {
-    margin-left: 5px;
-
-    &::after {
-      content: attr(data-unit);
-      margin-left: 2px;
-      font-size: 90%;
-    }
-  }
-
-  p {
-    font-size: 90%;
-    color: $textColorLight;
-    margin-top: 7px;
-    font-style: italic;
   }
 }
 
-button#save {
-  display: inline-block;
-  margin-top: 50px;
-  outline: none;
-  border: none;
-  text-shadow: none;
-  box-shadow: none;
-  color: $textColorInverted;
-  background: $settingsMainColor;
-  padding: 3px 12px 4px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-button#restore {
-  display: inline-block;
-  outline: none;
-  border: none;
-  text-shadow: none;
-  box-shadow: none;
-  background: transparent;
-  padding: 0 7px;
-  margin-left: 15px;
-  vertical-align: middle;
-  font-size: 90%;
-  cursor: pointer;
-  transition: background 0.5s;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.05);
-  }
-}
-
-p#copyright {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  font-size: 90%;
-  color: $textColorLight;
-}
-
-div#content {
+section#content {
+  padding: 20px;
   transition: opacity 0.3s;
+
+  div.box {
+    margin-top: 30px;
+
+    span.subLabel {
+      display: inline-block;
+      vertical-align: top;
+      font-style: italic;
+      margin: 0 10px 0 20px;
+    }
+
+    label {
+      display: inline-block;
+      vertical-align: top;
+      font-weight: 400;
+      margin-right: 15px;
+
+      + span.subLabel {
+        margin-left: 0;
+      }
+    }
+
+    input {
+      display: inline-block;
+      vertical-align: top;
+
+      &[type='checkbox'] {
+        margin-top: 3px;
+      }
+
+      &[type='range'] {
+
+        + span {
+          position: relative;
+          display: inline-block;
+          background: rgba(0, 0, 0, 0.1);
+          color: $textColor;
+          font-size: 70%;
+          padding: 2px 5px 3px;
+          margin: 0 0 0 6px;
+          text-align: center;
+          min-width: 35px;
+          transition: opacity 0.3s;
+
+          &::before {
+            content: "";
+            position: absolute;
+            top: calc(50% - 4px);
+            left: -8px;
+            border: 4px solid transparent;
+            border-right-color: rgba(0, 0, 0, 0.1);
+          }
+
+          &::after {
+            content: attr(data-unit);
+          }
+        }
+      }
+    }
+
+    select {
+      display: inline-block;
+      vertical-align: top;
+      margin-top: -4px;
+    }
+
+    p {
+      font-size: 90%;
+      color: $textColorLight;
+      margin-top: 7px;
+      font-style: italic;
+    }
+  }
+}
+
+section#control {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 15px;
+  margin-top: 20px;
+
+  > button {
+    display: inline-block;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    text-shadow: none;
+    box-shadow: none;
+    border-radius: 3px;
+
+    &.save {
+      color: $textColorInverted;
+      background: $settingsMainColor;
+      padding: 3px 12px 4px;
+    }
+
+    &.restore {
+      background: transparent;
+      padding: 0 7px;
+      font-size: 90%;
+      float: right;
+      transition: background 0.5s;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
 }
 
 div#savedMsg, div#restoreMsg {
@@ -161,7 +169,7 @@ body {
 
   &.saved, &.restored {
 
-    div#content {
+    section#content, section#control {
       opacity: 0.2;
       pointer-events: none;
     }

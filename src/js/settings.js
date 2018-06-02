@@ -26,9 +26,9 @@
                 showIndicator: $("input#showIndicator"),
                 openAction: $("select#openAction"),
                 closeTab: $("input#closeTab"),
-                save: $("button#save"),
-                restoreDefaults: $("button#restore"),
-                copyright: $("span#copyright")
+                save: $("section#control > button.save"),
+                restoreDefaults: $("section#control > button.restore"),
+                creationDate: $("section#about > span.created")
             },
             manifest: chrome.runtime.getManifest()
         };
@@ -95,11 +95,11 @@
         };
 
         let initSettings = () => { // load settings
-            let createdDate = +this.opts.elm.copyright.children("span.created").text();
+            let createdDate = +this.opts.elm.creationDate.text();
             let currentYear = new Date().getFullYear();
 
             if (currentYear > createdDate) {
-                this.opts.elm.copyright.children("span.created").text(createdDate + " - " + currentYear);
+                this.opts.elm.creationDate.text(createdDate + " - " + currentYear);
             }
 
             chrome.storage.sync.get("showIndicator", (obj) => {
