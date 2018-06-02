@@ -6,6 +6,7 @@
         let port = null;
         let callbacks = {};
         let mouseNotTopLeft = false;
+        let configFields = ["pxTolerance", "showIndicator", "closeTab", "navigateForward", "openAction"];
 
         /*
          * ################################
@@ -32,9 +33,10 @@
 
         /**
          * Initialises the configuration values for the extension
+         *
+         * @returns {Promise}
          */
-        let initConfig = () => {
-            let configFields = ["pxTolerance", "showIndicator", "closeTab", "openAction"];
+        let initConfig = async () => {
             chrome.storage.sync.get(configFields, (obj) => {
                 configFields.forEach((field) => {
                     if (typeof obj[field] !== "undefined") {
@@ -69,22 +71,18 @@
          *
          * @returns {Promise}
          */
-        let initPort = () => {
-            return new Promise((resolve) => {
-                if (port) {
-                    port.disconnect();
+        let initPort = async () => {
+            if (port) {
+                port.disconnect();
+            }
+
+            port = chrome.runtime.connect({name: "background"});
+
+            port.onMessage.addListener((obj) => {
+                if (callbacks[obj.uid]) {
+                    callbacks[obj.uid](obj.result);
+                    delete callbacks[obj.uid];
                 }
-
-                port = chrome.runtime.connect({name: "background"});
-
-                port.onMessage.addListener((obj) => {
-                    if (callbacks[obj.uid]) {
-                        callbacks[obj.uid](obj.result);
-                        delete callbacks[obj.uid];
-                    }
-                });
-
-                resolve();
             });
         };
 
@@ -115,10 +113,9 @@
         };
 
         /**
-         * Performs the action,
-         * navigates back in history or closes the tab if there is no other history entry
+         * Navigates back in history or closes the tab if there is no other history entry
          */
-        let performAction = () => {
+        let navigateBack = () => {
             let useFallback = true;
             window.onbeforeunload = window.onpopstate = () => {
                 useFallback = false;
@@ -134,15 +131,29 @@
         };
 
         /**
+         * Navigates forward in history
+         */
+        let navigateForward = () => {
+            window.history.forward();
+        };
+
+        /**
          * Initialises the eventhandlers
          */
         let initEvents = () => {
-            document.addEventListener(opts.config.openAction, (e) => {
-                if (e.isTrusted && (opts.config.openAction !== "mousedown" || e.button === 0) && isMousePosInPixelTolerance(e.pageX, e.pageY)) { // check mouse position and mouse button
-                    e.stopPropagation();
-                    e.preventDefault();
-                    performAction();
-                }
+            ["mousedown", "contextmenu"].forEach((eventName) => {
+                document.addEventListener(eventName, (e) => {
+                    if (e.isTrusted && (eventName !== "mousedown" || e.button === 0) && isMousePosInPixelTolerance(e.pageX, e.pageY)) { // check mouse position and mouse button
+                        e.stopPropagation();
+                        e.preventDefault();
+
+                        if (eventName === opts.config.openAction) {
+                            navigateBack();
+                        } else if (opts.config.navigateForward) {
+                            navigateForward();
+                        }
+                    }
+                });
             });
 
             document.addEventListener("DOMContentLoaded", () => {
@@ -152,7 +163,7 @@
             chrome.extension.onMessage.addListener((message) => { // listen for events from the background script
                 if (message && message.action && (message.reinitialized === null || this.initialized > message.reinitialized)) { // background is not reinitialized after the creation of this instance of the script -> perform the action
                     if (message.action === "navigateBack") { //
-                        performAction();
+                        navigateBack();
                     }
                 }
             });

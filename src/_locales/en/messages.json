@@ -32,6 +32,12 @@
   "settings_open_action_rightclick": {
     "message": "Right click"
   },
+  "settings_navigate_forward": {
+    "message": "Navigate forward"
+  },
+  "settings_navigate_forward_desc": {
+    "message": "Navigate forward by clicking the other mouse button"
+  },
   "settings_show_indicator": {
     "message": "Show indicator"
   },

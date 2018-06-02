@@ -17,6 +17,7 @@
             openAction: "mousedown",
             showIndicator: true,
             closeTab: false,
+            navigateForward: false,
             indicatorWidth: 40
         }
     };

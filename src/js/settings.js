@@ -26,8 +26,9 @@
                 showIndicator: $("input#showIndicator"),
                 openAction: $("select#openAction"),
                 closeTab: $("input#closeTab"),
+                navigateForward: $("input#navigateForward"),
                 save: $("section#control > button.save"),
-                restoreDefaults: $("section#control > button.restore"),
+                restore: $("section#control > button.restore"),
                 creationDate: $("section#about > span.created")
             },
             manifest: chrome.runtime.getManifest()
@@ -63,34 +64,12 @@
                 $(e.currentTarget).next("span").text(e.currentTarget.value);
             });
 
-            this.opts.elm.save.on("click", (e) => { // save settings
-                chrome.storage.sync.set({
-                    showIndicator: this.opts.elm.showIndicator[0].checked,
-                    closeTab: this.opts.elm.closeTab[0].checked,
-                    openAction: this.opts.elm.openAction[0].value,
-                    pxTolerance: {
-                        windowed: this.opts.elm.pxToleranceWindowed[0].value,
-                        maximized: this.opts.elm.pxToleranceMaximized[0].value
-                    }
-                }, () => {
-                    this.opts.elm.body.addClass(this.opts.classes.saved);
-                    setTimeout(() => {
-                        this.opts.elm.body.removeClass(this.opts.classes.saved);
-                    }, 1500);
-                });
+            this.opts.elm.save.on("click", () => {
+                save();
             });
 
-
-            this.opts.elm.restoreDefaults.on("click", () => { // restore default settings
-                chrome.storage.sync.remove(["showIndicator", "closeTab", "pxTolerance", "openAction"], () => {
-                    this.opts.elm.body.addClass(this.opts.classes.restored);
-                    setTimeout(() => {
-                        this.opts.elm.body.removeClass(this.opts.classes.restored);
-                        setTimeout(() => {
-                            window.close();
-                        }, 100);
-                    }, 1500);
-                });
+            this.opts.elm.restore.on("click", () => {
+                restore();
             });
         };
 
@@ -110,6 +89,10 @@
                 this.opts.elm.closeTab[0].checked = typeof obj.closeTab === "undefined" ? false : (obj.closeTab === true);
             });
 
+            chrome.storage.sync.get("navigateForward", (obj) => {
+                this.opts.elm.navigateForward[0].checked = typeof obj.navigateForward === "undefined" ? false : (obj.navigateForward === true);
+            });
+
             chrome.storage.sync.get("openAction", (obj) => {
                 this.opts.elm.openAction[0].value = typeof obj.openAction === "undefined" ? "mousedown" : obj.openAction;
             });
@@ -126,6 +109,36 @@
 
                 this.opts.elm.pxToleranceMaximized.trigger("change");
                 this.opts.elm.pxToleranceWindowed.trigger("change");
+            });
+        };
+
+        let save = () => { // save settings
+            chrome.storage.sync.set({
+                showIndicator: this.opts.elm.showIndicator[0].checked,
+                closeTab: this.opts.elm.closeTab[0].checked,
+                navigateForward: this.opts.elm.navigateForward[0].checked,
+                openAction: this.opts.elm.openAction[0].value,
+                pxTolerance: {
+                    windowed: this.opts.elm.pxToleranceWindowed[0].value,
+                    maximized: this.opts.elm.pxToleranceMaximized[0].value
+                }
+            }, () => {
+                this.opts.elm.body.addClass(this.opts.classes.saved);
+                setTimeout(() => {
+                    this.opts.elm.body.removeClass(this.opts.classes.saved);
+                }, 1500);
+            });
+        };
+
+        let restore = () => { // restore default settings
+            chrome.storage.sync.remove(["showIndicator", "closeTab", "navigateForward", "pxTolerance", "openAction"], () => {
+                this.opts.elm.body.addClass(this.opts.classes.restored);
+                setTimeout(() => {
+                    this.opts.elm.body.removeClass(this.opts.classes.restored);
+                    setTimeout(() => {
+                        window.close();
+                    }, 100);
+                }, 1500);
             });
         };
 
