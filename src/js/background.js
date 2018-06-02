@@ -5,8 +5,6 @@
 
         this.isDev = false;
         let reinitialized = null;
-        let data = {};
-        let shareUserdata = false;
 
         /**
          * Injects the content scripts to all tabs and because of this runs the extension there again
@@ -105,35 +103,6 @@
 
         /**
          *
-         * @returns {Promise}
-         */
-        let initModel = () => {
-            return new Promise((resolve) => {
-                chrome.storage.sync.get(["model", "shareUserdata"], (obj) => {
-                    data = obj.model || {};
-                    shareUserdata = typeof obj.shareUserdata === "undefined" ? null : obj.shareUserdata;
-
-                    if (typeof data.installationDate === "undefined") { // no date yet -> save a start date in storage
-                        data.installationDate = +new Date();
-                    }
-
-                    let today = +new Date().setHours(0, 0, 0, 0);
-                    if (typeof data.lastTrackDate === "undefined" || data.lastTrackDate !== today) {
-                        data.lastTrackDate = today;
-                        // @toDo trackUserData
-                    }
-
-                    chrome.storage.sync.set({
-                        model: data
-                    }, () => {
-                        resolve();
-                    });
-                });
-            });
-        };
-
-        /**
-         *
          */
         this.run = () => {
             let manifest = chrome.runtime.getManifest();
@@ -142,11 +111,10 @@
 
             Promise.all([
                 initEvents(),
-                initPort(),
-                initModel()
+                initPort()
             ]).then(() => {
-                if (this.isDev) {
-                    console.log("LOADED", +new Date() - start);
+                if (this.isDev && console && console.log) {
+                    console.log("Finished loading background script", +new Date() - start);
                 }
             });
         };
