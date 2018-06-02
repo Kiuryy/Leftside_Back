@@ -1,11 +1,15 @@
 /**
- * jsu v1.1.1
+ * jsu - Javascript Utilities
  *
  * Philipp König
  * https://blockbyte.de/
  */
 (() => {
     "use strict";
+
+    if (window.jsu) { // already initialized
+        return false;
+    }
 
     let runningXhr = [];
 
@@ -44,7 +48,7 @@
                     }
                 }
             }
-        }
+        };
     })();
 
     /**
@@ -67,7 +71,7 @@
              */
             [delay]: (t = 0) => {
                 return new Promise((resolve) => {
-                    setTimeout(resolve, t)
+                    setTimeout(resolve, t);
                 });
             },
             /**
@@ -225,7 +229,7 @@
                 let s = param;
 
                 if (typeof param === "string" && (asSelector === false || param.search("<") > -1)) {
-                    let div = d.createElement('div');
+                    let div = d.createElement("div");
                     div.innerHTML = param;
                     s = div.childNodes;
                 }
@@ -300,7 +304,7 @@
              *
              * @param opts
              * @param val
-             * @returns {mixed|jsuNode}
+             * @returns {*|jsuNode}
              */
             [css](opts, val) {
                 let isSetter = false;
@@ -339,7 +343,7 @@
              *
              * @param opts
              * @param val
-             * @returns {mixed|jsuNode}
+             * @returns {*|jsuNode}
              */
             [attr](opts, val) {
                 let isSetter = false;
@@ -416,8 +420,10 @@
                 if (!eventHandlerList[info.event]) {
                     eventHandlerList[info.event] = [];
                 }
+
                 eventHandlerList[info.event].push({
                     fn: info.fn,
+                    name: info.name || (info.event + "_" + (+new Date()) + Math.random().toString(36).substr(2, 12)),
                     opts: info.opts,
                     wantsUntrusted: info.wantsUntrusted
                 });
@@ -529,7 +535,7 @@
              *
              * @param key
              * @param val
-             * @returns {mixed|jsuNode}
+             * @returns {*|jsuNode}
              */
             [data](key, val) {
                 let isSetter = false;
@@ -583,7 +589,7 @@
 
                     if (h[isDefined](elmDataList)) {
                         if (removeAll) { // remove all
-                            dataMap.delete(node);
+                            dataMap["delete"](node);
                         } else if (h[isDefined](elmDataList[key])) { // remove specific
                             delete elmDataList[key];
                         }
@@ -612,8 +618,7 @@
                                 value: overrideObj[key]
                             });
                         } catch (ex) {
-
-
+                            //
                         }
                     });
                 };
@@ -639,25 +644,31 @@
                 this[forEach]((node) => {
                     let events = eventStr.split(/\s+/g);
                     events[forEach]((event) => {
+                        let eventInfo = event.split(/\./);
 
                         let fn = (e) => {
-                            updateEventObject(e, {type: event});
+                            updateEventObject(e, {type: eventInfo[0]});
 
                             if (eventDelegation) { // event delegation
+                                let opts = {
+                                    preventDefault: () => {
+                                        e.preventDefault();
+                                    },
+                                    stopPropagation: () => {
+                                        e.stopPropagation();
+                                    }
+                                };
+
                                 h[forEach](node.querySelectorAll(":scope " + callbackOrElm), (element) => {
                                     let el = e.target;
                                     while (el && el !== node) {
                                         if (el === element) {
-                                            let clonedEventObj = new MouseEvent(event, e);
+                                            let clonedEventObj = new MouseEvent(eventInfo[0], e);
                                             updateEventObject(clonedEventObj, {
-                                                preventDefault: () => {
-                                                    e.preventDefault()
-                                                },
-                                                stopPropagation: () => {
-                                                    e.stopPropagation()
-                                                },
-                                                target: e.target,
-                                                currentTarget: el
+                                                preventDefault: opts.preventDefault,
+                                                stopPropagation: opts.stopPropagation,
+                                                currentTarget: el,
+                                                target: e.target
                                             });
                                             callbackOrOpts(clonedEventObj);
                                         }
@@ -670,7 +681,8 @@
                         };
 
                         jsuNode[private_addEventListener](node, {
-                            event: event,
+                            event: eventInfo[0],
+                            name: eventInfo[1],
                             fn: fn,
                             opts: opts,
                             wantsUntrusted: wantsUntrusted
@@ -693,13 +705,25 @@
                     let eventHandlerList = eventHandlerMap.get(node);
 
                     if (h[isDefined](eventHandlerList)) {
-
                         let events = eventStr.split(/\s+/g);
                         events[forEach]((event) => {
-                            if (eventHandlerList[event]) {
-                                h[forEach](eventHandlerList[event], (info, idx) => {
-                                    node.removeEventListener(event, info.fn);
-                                    eventHandlerList[event].splice(idx, 1);
+                            let eventInfo = event.split(/\./);
+
+                            if (eventInfo[0] === "*") { // remove all eventlisteners
+                                Object.entries(eventHandlerList)[forEach](([eventName, entries]) => {
+                                    h[forEach](entries, (info, idx) => {
+                                        if (typeof eventInfo[1] === "undefined" || eventInfo[1] === info.name) {
+                                            node.removeEventListener(eventName, info.fn);
+                                            eventHandlerList[eventName].splice(idx, 1);
+                                        }
+                                    }, true);
+                                });
+                            } else if (eventHandlerList[eventInfo[0]]) { // remove specific eventlisteners (e.g. click, mouseover, ...)
+                                h[forEach](eventHandlerList[eventInfo[0]], (info, idx) => {
+                                    if (typeof eventInfo[1] === "undefined" || eventInfo[1] === info.name) {
+                                        node.removeEventListener(eventInfo[0], info.fn);
+                                        eventHandlerList[eventInfo[0]].splice(idx, 1);
+                                    }
                                 }, true);
                             }
                         });
@@ -720,14 +744,15 @@
             [trigger](eventStr, opts) {
                 let events = eventStr.split(/\s+/g);
                 events[forEach]((event) => {
-                    let eventObj = new Event(event, opts);
+                    let eventInfo = event.split(/\./);
+                    let eventObj = new CustomEvent(eventInfo[0], opts);
                     this[forEach]((node) => {
                         node.dispatchEvent(eventObj);
                     });
                 });
 
                 return this;
-            };
+            }
 
 
             /**
@@ -737,8 +762,14 @@
              * @returns {jsuNode}
              */
             [addClass](cl) {
+                if (typeof cl !== "object") {
+                    cl = [cl];
+                }
+
                 this[forEach]((node) => {
-                    node.classList.add(cl);
+                    cl.forEach((c) => {
+                        node.classList.add(c);
+                    });
                 });
                 return this;
             }
@@ -751,8 +782,14 @@
              * @returns {jsuNode}
              */
             [removeClass](cl) {
+                if (typeof cl !== "object") {
+                    cl = [cl];
+                }
+
                 this[forEach]((node) => {
-                    node.classList.remove(cl);
+                    cl.forEach((c) => {
+                        node.classList.remove(c);
+                    });
                 });
                 return this;
             }
@@ -809,8 +846,8 @@
 
                     let dim = boundClientRect[type];
                     if (includeMargins) {
-                        dim += parseInt(computedStyle.getPropertyValue('margin-' + margins[0]));
-                        dim += parseInt(computedStyle.getPropertyValue('margin-' + margins[1]));
+                        dim += parseInt(computedStyle.getPropertyValue("margin-" + margins[0]));
+                        dim += parseInt(computedStyle.getPropertyValue("margin-" + margins[1]));
                     }
 
                     ret.push(dim);
@@ -902,7 +939,7 @@
                 });
 
                 return ret;
-            };
+            }
 
 
             /**
@@ -932,8 +969,8 @@
             [remove]() {
                 this[forEach]((node) => {
                     if (node && node.parentElement) {
-                        eventHandlerMap.delete(node);
-                        dataMap.delete(node);
+                        eventHandlerMap["delete"](node);
+                        dataMap["delete"](node);
                         node.parentElement.removeChild(node);
                     }
                 });
@@ -943,42 +980,48 @@
             /**
              *
              * @param s
-             * @param asSelector
              * @param type
+             * @param asSelector
              * @returns {jsuNode}
              */
-            [private_elementMove](s, asSelector = true, type) {
-                if (typeof s === "string" && s.search("<") > -1) {
-                    asSelector = false;
-                }
-
-                let elmObj = new jsuNode(s, asSelector);
-
-                this[forEach]((node) => {
-                    let clonedElmObj = jsuNode[private_clone](elmObj);
-                    clonedElmObj[forEach]((elm) => {
-                        switch (type) {
-                            case "append": {
-                                node.appendChild(elm);
-                                break;
-                            }
-                            case "prepend": {
-                                node.insertBefore(elm, node.firstChild);
-                                break;
-                            }
-                            case "before": {
-                                node.parentNode.insertBefore(elm, node);
-                                break;
-                            }
-                            case "after": {
-                                node.parentNode.insertBefore(elm, node.nextSibling);
-                                break;
-                            }
-                        }
+            [private_elementMove](s, type, asSelector = true) {
+                if (Array.isArray(s)) {
+                    s.forEach((s) => {
+                        this[private_elementMove](s, type, asSelector);
                     });
-                });
+                } else {
+                    if (typeof s === "string" && s.search("<") > -1) {
+                        asSelector = false;
+                    }
 
-                elmObj[remove]();
+                    let elmObj = new jsuNode(s, asSelector);
+
+                    this[forEach]((node) => {
+                        let clonedElmObj = jsuNode[private_clone](elmObj);
+                        clonedElmObj[forEach]((elm) => {
+                            switch (type) {
+                                case "append": {
+                                    node.appendChild(elm);
+                                    break;
+                                }
+                                case "prepend": {
+                                    node.insertBefore(elm, node.firstChild);
+                                    break;
+                                }
+                                case "before": {
+                                    node.parentNode.insertBefore(elm, node);
+                                    break;
+                                }
+                                case "after": {
+                                    node.parentNode.insertBefore(elm, node.nextSibling);
+                                    break;
+                                }
+                            }
+                        });
+                    });
+
+                    elmObj[remove]();
+                }
 
                 return this;
             }
@@ -1032,7 +1075,7 @@
              * @returns {jsuNode}
              */
             [append](s, asSelector) {
-                return this[private_elementMove](s, asSelector, "append");
+                return this[private_elementMove](s, "append", asSelector);
             }
 
 
@@ -1055,7 +1098,7 @@
              * @returns {jsuNode}
              */
             [prepend](s, asSelector = true) {
-                return this[private_elementMove](s, asSelector, "prepend");
+                return this[private_elementMove](s, "prepend", asSelector);
             }
 
 
@@ -1078,7 +1121,7 @@
              * @returns {jsuNode}
              */
             [before](s, asSelector = true) {
-                return this[private_elementMove](s, asSelector, "before");
+                return this[private_elementMove](s, "before", asSelector);
             }
 
 
@@ -1101,7 +1144,7 @@
              * @returns {jsuNode}
              */
             [after](s, asSelector = true) {
-                return this[private_elementMove](s, asSelector, "after");
+                return this[private_elementMove](s, "after", asSelector);
             }
 
 
@@ -1129,8 +1172,8 @@
                 this[forEach]((node) => {
                     let siblingElm = type === "prev" ? node.previousElementSibling : node.nextElementSibling;
 
-                    if (h[isDefined](siblingElm)
-                        && (!hasSelector || (h[isDefined](siblingElm.matches) && siblingElm.matches(s)))) {
+                    if (h[isDefined](siblingElm) &&
+                        (!hasSelector || (h[isDefined](siblingElm.matches) && siblingElm.matches(s)))) {
                         ret.push(siblingElm);
                     }
                 });
@@ -1192,7 +1235,7 @@
                     ret.push(new jsuNode(elmList));
                 });
 
-                return this[nodes].length > 1 ? ret : ret[0];
+                return this[nodes].length > 1 ? new jsuNode(ret) : ret[0];
             }
 
 
@@ -1249,7 +1292,7 @@
                     ret.push(new jsuNode(parentElm));
                 });
 
-                return this[nodes].length > 1 ? ret : ret[0];
+                return this[nodes].length > 1 ? new jsuNode(ret) : ret[0];
             }
 
 
@@ -1278,7 +1321,7 @@
                     ret.push(new jsuNode(parentsList));
                 });
 
-                return this[nodes].length > 1 ? ret : ret[0];
+                return this[nodes].length > 1 ? new jsuNode(ret) : ret[0];
             }
 
 
@@ -1294,7 +1337,7 @@
                     ret.push(new jsuNode(node.ownerDocument));
                 });
 
-                return this[nodes].length > 1 ? ret : ret[0];
+                return this[nodes].length > 1 ? new jsuNode(ret) : ret[0];
             }
 
 
@@ -1339,7 +1382,7 @@
                 return this[nodes].length;
             }
 
-        }
+        };
     })(jsuHelper);
 
     /**
