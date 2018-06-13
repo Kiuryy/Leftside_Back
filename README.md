@@ -10,7 +10,7 @@
 Chrome extension, which allows you to navigate back by just hitting the mouse on the left side of your screen.
 
 <a href="https://chrome.google.com/webstore/detail/leftside-back/gdcddfacdedphcamippdkojfngoakglg" target="_blank">
-<img src="https://blockbyte.de/img/extensions/chromeWebStore.png" width="200" />
+<img src="https://extensions.blockbyte.de/img/chromeWebStore_border.png" width="200" />
 </a>
 
 ## Release History
