@@ -1,5 +1,7 @@
-[tbd]
- - load jsu for extension -> easier to implement destroy mechanism
+[1.6]
+ - Added option to navigate forward
+ - Updated settings design
+ - Added eslint
 
 [1.5]
  - Replaced gruntjs with npm scripts
