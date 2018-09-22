@@ -100,7 +100,7 @@
                     });
 
                     let formData = null;
-                    if (opts.data) { // submit request parameters
+                    if (opts.data) { // submit data
                         formData = new FormData();
                         Object.entries(opts.data).forEach(([key, value]) => {
                             if (typeof value === "object") {
@@ -108,6 +108,17 @@
                             }
 
                             formData.append(key, value);
+                        });
+                    }
+
+                    if (opts.files) { // submit files
+                        if (formData === null) {
+                            formData = new FormData();
+                        }
+                        opts.files.forEach((file) => {
+                            file.files.forEach((fileObj) => {
+                                formData.append(file.name + "[]", fileObj);
+                            });
                         });
                     }
 
@@ -228,7 +239,7 @@
             constructor(param, asSelector = true) {
                 let s = param;
 
-                if (typeof param === "string" && (asSelector === false || param.search("<") > -1)) {
+                if (typeof param === "string" && (asSelector === false || param.indexOf("<") > -1)) {
                     let div = d.createElement("div");
                     div.innerHTML = param;
                     s = div.childNodes;
@@ -990,7 +1001,7 @@
                         this[private_elementMove](s, type, asSelector);
                     });
                 } else {
-                    if (typeof s === "string" && s.search("<") > -1) {
+                    if (typeof s === "string" && s.indexOf("<") > -1) {
                         asSelector = false;
                     }
 

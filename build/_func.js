@@ -15,7 +15,9 @@
             uglifyjs: require("uglify-es"),
             sass: require("node-sass"),
             copy: require("cp-file"),
-            request: require("request")
+            request: require("request"),
+            zip: require("zip-dir"),
+            exec: require("child_process").exec
         };
 
         /*
@@ -38,28 +40,6 @@
                         throw err;
                     }
                     resolve(matches);
-                });
-            });
-        };
-
-        /**
-         * Returns the content of the given url
-         *
-         * @param {string} url
-         * @returns {Promise}
-         */
-        this.getRemoteContent = (url) => {
-            return new Promise((resolve, reject) => {
-                module.request({
-                    url: url,
-                    timeout: 5000,
-                    method: "GET"
-                }, (error, response, body) => {
-                    if (error === null && body && body.length > 0) {
-                        resolve(body);
-                    } else {
-                        reject();
-                    }
                 });
             });
         };
@@ -130,6 +110,68 @@
          * PUBLIC
          * ################################
          */
+
+        /**
+         * Executes the given command
+         *
+         * @param {string} command
+         * @returns {Promise}
+         */
+        this.cmd = (command) => {
+            return new Promise((resolve) => {
+                if (typeof command === "object") {
+                    command = command.join("&&");
+                }
+
+                module.exec(command, (error, stdout, stderr) => {
+                    resolve({
+                        stdout: stdout,
+                        stderr: stderr
+                    });
+                });
+            });
+        };
+
+        /**
+         * Returns the content of the given url
+         *
+         * @param {string} url
+         * @returns {Promise}
+         */
+        this.getRemoteContent = (url) => {
+            return new Promise((resolve, reject) => {
+                module.request({
+                    url: url,
+                    timeout: 5000,
+                    method: "GET"
+                }, (error, response, body) => {
+                    if (error === null && body && body.length > 0) {
+                        resolve(body);
+                    } else {
+                        reject();
+                    }
+                });
+            });
+        };
+
+        /**
+         * Creates a zip file containing all files of the given directory
+         *
+         * @param {string} dir
+         * @param {string} dest
+         * @returns {Promise}
+         */
+        this.zipDirectory = (dir, dest) => {
+            return new Promise((resolve, reject) => {
+                module.zip(dir, {saveTo: dest}, (err) => {
+                    if (err) {
+                        reject();
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        };
 
         /**
          * Creates a file with the given content

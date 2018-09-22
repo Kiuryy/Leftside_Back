@@ -10,8 +10,8 @@
     "url": "https://github.com/Kiuryy/Leftside_Back"
   },
   "scripts": {
-    "init": "npm install --only=dev && node build/run.js",
-    "release": "ncu -a --packageFile package.json && npm update && eslint --fix src/js/**/*.js && eslint --fix build/**/*.js && node build/run.js",
+    "init": "npm install --only=dev && npm run release",
+    "release": "ncu -a --packageFile package.json && npm update && node build/run.js",
     "scss": "node-sass --source-map true -o src/css src/scss"
   },
   "devDependencies": {
@@ -19,14 +19,15 @@
     "cp-file": "^6.0.0",
     "create-file": "^1.0.1",
     "del": "^3.0.0",
-    "eslint": "^4.19.1",
+    "eslint": "^5.6.0",
     "glob-concat": "^1.0.1",
-    "html-minifier": "^3.5.16",
+    "html-minifier": "^3.5.20",
     "jsonminify": "^0.4.1",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.9.3",
     "npm-check-updates": "^2.14.2",
     "read-file": "^0.2.0",
-    "request": "^2.87.0",
-    "uglify-es": "^3.3.10"
+    "request": "^2.88.0",
+    "uglify-es": "^3.3.10",
+    "zip-dir": "^1.0.2"
   }
 }

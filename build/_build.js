@@ -134,6 +134,17 @@
         };
 
         /**
+         * Generate zip file from dist directory
+         *
+         * @returns {Promise}
+         */
+        let zip = () => {
+            return measureTime((resolve) => {
+                func.zipDirectory(path.dist, process.env.npm_package_name + "_" + process.env.npm_package_version + ".zip").then(resolve);
+            }, "Created zip file from dist directory");
+        };
+
+        /**
          * Parses the html files and copies them to the dist directory
          *
          * @returns {Promise}
@@ -168,11 +179,81 @@
             }, "Moved json files to dist directory");
         };
 
+
+        /**
+         * Updates the mininum Chrome version in the manifest.json to the current version - 4
+         *
+         * @returns {Promise}
+         */
+        let updateMinimumChromeVersion = () => {
+            return measureTime((resolve) => {
+                func.getRemoteContent("https://omahaproxy.appspot.com/all.json").then((content) => {
+                    let result = JSON.parse(content);
+                    let currentVersion = null;
+
+                    result.some((platform) => {
+                        if (platform.os === "win64") {
+                            platform.versions.some((info) => {
+                                if (info.channel === "stable") {
+                                    currentVersion = +info.version.replace(/(\d+)\..*$/, "$1");
+                                    return true;
+                                }
+                            });
+                            return true;
+                        }
+                    });
+
+                    if (!currentVersion) {
+                        console.error("Could not determine current Chrome version");
+                        process.exit(1);
+                    } else {
+                        let minVersion = currentVersion - 4;
+
+                        func.replace({ // update the min version in the manifest
+                            [path.src + "manifest.json"]: path.src + "manifest.json"
+                        }, [
+                            [/("minimum_chrome_version":[\s]*")[^"]*("[\s]*,)/ig, "$1" + (minVersion) + "$2"]
+                        ]).then(() => {
+                            resolve("v" + minVersion);
+                        });
+                    }
+
+
+                });
+            }, "Updated minimum chrome version");
+        };
+
+        /**
+         * Performs eslint checks for the build and src/js directories
+         *
+         * @returns {Promise}
+         */
+        let eslintCheck = async () => {
+            for (let dir of ["build", "src/js"]) {
+                await measureTime(async (resolve) => {
+                    func.cmd("eslint --fix " + dir + "/**/*.js").then((obj) => {
+                        if (obj.stdout && obj.stdout.trim().length > 0) {
+                            console.error(obj.stdout);
+                            process.exit(1);
+                        }
+                        resolve();
+                    });
+                }, "Performed eslint check for " + dir);
+            }
+        };
+
+        /**
+         *
+         * @param {function} func
+         * @param {string} msg
+         * @returns {Promise}
+         */
         let measureTime = (func, msg) => {
             return new Promise((resolve) => {
                 let start = +new Date();
-                new Promise(func).then(() => {
-                    console.log(" - " + msg + " (" + (+new Date() - start) + "ms)");
+                new Promise(func).then((info) => {
+                    let timeInfo = "[" + (+new Date() - start) + " ms]";
+                    console.log(" - " + timeInfo + "" + (" ".repeat(10 - timeInfo.length)) + msg + (info ? (" -> " + info) : ""));
                     resolve();
                 });
             });
@@ -184,6 +265,10 @@
         this.release = () => {
             return new Promise((resolve) => {
                 cleanPre().then(() => {
+                    return eslintCheck();
+                }).then(() => {
+                    return updateMinimumChromeVersion();
+                }).then(() => {
                     return remoteJs();
                 }).then(() => {
                     return js();
@@ -195,6 +280,8 @@
                     return json();
                 }).then(() => {
                     return html();
+                }).then(() => {
+                    return zip();
                 }).then(() => {
                     return cleanPost();
                 }).then(() => {
