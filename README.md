@@ -1,4 +1,4 @@
-# Leftside Back <img src="dist/img/icon/256x256.webp" width="76" align="left" />
+# Leftside Back <img src="src/img/icon/256x256.webp" width="76" align="left" />
 
 [![GitHub release](https://img.shields.io/github/release/kiuryy/leftside_back.svg)](https://github.com/Kiuryy/Leftside_Back/releases)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/d/gdcddfacdedphcamippdkojfngoakglg.svg)](https://chrome.google.com/webstore/detail/leftside-back/gdcddfacdedphcamippdkojfngoakglg)
