@@ -4,9 +4,9 @@
     window.ext = function (opts) {
 
         let port = null;
-        let callbacks = {};
+        const callbacks = {};
         let mouseNotTopLeft = false;
-        let configFields = ["pxTolerance", "showIndicator", "closeTab", "navigateForward", "openAction"];
+        const configFields = ["pxTolerance", "showIndicator", "closeTab", "navigateForward", "openAction"];
 
         /*
          * ################################
@@ -36,7 +36,7 @@
          *
          * @returns {Promise}
          */
-        let initConfig = async () => {
+        const initConfig = async () => {
             chrome.storage.sync.get(configFields, (obj) => {
                 configFields.forEach((field) => {
                     if (typeof obj[field] !== "undefined") {
@@ -61,8 +61,8 @@
          *
          * @returns {int}
          */
-        let getPixelTolerance = () => {
-            let isWindowed = window.screenX !== 0 || window.screenY !== 0 || window.screen.availWidth !== window.innerWidth;
+        const getPixelTolerance = () => {
+            const isWindowed = window.screenX !== 0 || window.screenY !== 0 || window.screen.availWidth !== window.innerWidth;
             return +opts.config.pxTolerance[isWindowed ? "windowed" : "maximized"];
         };
 
@@ -71,7 +71,7 @@
          *
          * @returns {Promise}
          */
-        let initPort = async () => {
+        const initPort = async () => {
             if (port) {
                 port.disconnect();
             }
@@ -93,7 +93,7 @@
          * @param {object} opts
          * @returns {Promise}
          */
-        let sendMessage = (key, opts = {}) => {
+        const sendMessage = (key, opts = {}) => {
             return new Promise((resolve) => {
                 if (port) {
                     opts.type = key;
@@ -115,7 +115,7 @@
         /**
          * Navigates back in history or closes the tab if there is no other history entry
          */
-        let navigateBack = () => {
+        const navigateBack = () => {
             let useFallback = true;
             window.onbeforeunload = window.onpopstate = () => {
                 useFallback = false;
@@ -133,14 +133,14 @@
         /**
          * Navigates forward in history
          */
-        let navigateForward = () => {
+        const navigateForward = () => {
             window.history.forward();
         };
 
         /**
          * Initialises the eventhandlers
          */
-        let initEvents = () => {
+        const initEvents = () => {
             ["mousedown", "contextmenu"].forEach((eventName) => {
                 document.addEventListener(eventName, (e) => {
                     if (e.isTrusted && (eventName !== "mousedown" || e.button === 0) && isMousePosInPixelTolerance(e.pageX, e.pageY)) { // check mouse position and mouse button
@@ -172,9 +172,9 @@
         /**
          * Initialises the indicator
          */
-        let initIndicator = () => {
+        const initIndicator = () => {
             if (document && document.body && document.querySelector("#" + opts.ids.indicator) === null) { // prevent if document is not ready yet or indicator is already initialised
-                let elm = document.createElement("div");
+                const elm = document.createElement("div");
                 elm.id = opts.ids.indicator;
                 elm.innerHTML = "<div><span></span></div>";
                 document.body.appendChild(elm);
@@ -212,12 +212,12 @@
          * @param {int} pageY
          * @returns {boolean}
          */
-        let isMousePosInPixelTolerance = (pageX, pageY) => {
+        const isMousePosInPixelTolerance = (pageX, pageY) => {
             let ret = false;
             if (typeof pageX !== "undefined" && pageX !== null) {
                 if ((pageX > 0 || pageY > 0) || mouseNotTopLeft) { // protection from unwanted triggers with x = 0 and y = 0 on pageload
                     mouseNotTopLeft = true;
-                    let indicator = document.querySelector("#" + opts.ids.indicator);
+                    const indicator = document.querySelector("#" + opts.ids.indicator);
 
                     if (indicator) { // indicator is existing
                         let pixelTolerance = getPixelTolerance();
@@ -236,7 +236,7 @@
         /**
          * Fires an event to indicate, that the extension is loaded completely
          */
-        let extensionLoaded = () => {
+        const extensionLoaded = () => {
             document.dispatchEvent(new CustomEvent(opts.events.loaded, {
                 detail: {
                     pxTolerance: getPixelTolerance(),

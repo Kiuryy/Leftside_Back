@@ -50,16 +50,16 @@
          * ################################
          */
 
-        let initLanguage = () => {
+        const initLanguage = () => {
             $("[data-i18n]").forEach((elm) => {
-                let val = $(elm).attr(this.opts.attr.i18n);
+                const val = $(elm).attr(this.opts.attr.i18n);
                 $(elm).text(chrome.i18n.getMessage("settings_" + val));
             });
 
             this.opts.elm.title.text(this.opts.manifest.short_name + " - " + this.opts.elm.title.text());
         };
 
-        let initEvents = () => {
+        const initEvents = () => {
             this.opts.elm.rangeInputs.on("input change", (e) => {
                 $(e.currentTarget).next("span").text(e.currentTarget.value);
             });
@@ -73,9 +73,9 @@
             });
         };
 
-        let initSettings = () => { // load settings
-            let createdDate = +this.opts.elm.creationDate.text();
-            let currentYear = new Date().getFullYear();
+        const initSettings = () => { // load settings
+            const createdDate = +this.opts.elm.creationDate.text();
+            const currentYear = new Date().getFullYear();
 
             if (currentYear > createdDate) {
                 this.opts.elm.creationDate.text(createdDate + " - " + currentYear);
@@ -112,7 +112,7 @@
             });
         };
 
-        let save = () => { // save settings
+        const save = () => { // save settings
             chrome.storage.sync.set({
                 showIndicator: this.opts.elm.showIndicator[0].checked,
                 closeTab: this.opts.elm.closeTab[0].checked,
@@ -130,7 +130,7 @@
             });
         };
 
-        let restore = () => { // restore default settings
+        const restore = () => { // restore default settings
             chrome.storage.sync.remove(["showIndicator", "closeTab", "navigateForward", "pxTolerance", "openAction"], () => {
                 this.opts.elm.body.addClass(this.opts.classes.restored);
                 setTimeout(() => {

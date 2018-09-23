@@ -1,6 +1,7 @@
 (() => {
     "use strict";
 
+    /* eslint-disable no-console */
     /* global func, path */
     global.build = new function () {
 
@@ -9,9 +10,9 @@
          *
          * @returns {Promise}
          */
-        let cleanPre = () => {
+        const cleanPre = () => {
             return measureTime((resolve) => {
-                func.remove([path.tmp + "*", path.dist + "*"]).then(() => {
+                func.remove([path.tmp + "*", path.dist + "*", "*.zip"]).then(() => {
                     return func.createFile(path.tmp + "info.txt", new Date().toISOString());
                 }).then(() => {
                     resolve();
@@ -24,7 +25,7 @@
          *
          * @returns {Promise}
          */
-        let cleanPost = () => {
+        const cleanPost = () => {
             return measureTime((resolve) => {
                 func.remove([path.tmp]).then(() => {
                     resolve();
@@ -37,7 +38,7 @@
          *
          * @returns {Promise}
          */
-        let img = () => {
+        const img = () => {
             return measureTime((resolve) => {
                 func.copy([path.src + "img/**/*"], [path.src + "**/*.xcf", path.src + "img/icon/dev/**"], path.dist, false).then(() => {
                     resolve();
@@ -50,7 +51,7 @@
          *
          * @returns {Promise}
          */
-        let css = () => {
+        const css = () => {
             return measureTime((resolve) => {
                 func.minify([ // parse scss files
                     path.src + "scss/*.scss"
@@ -65,17 +66,17 @@
          *
          * @returns {Promise}
          */
-        let remoteJs = () => {
+        const remoteJs = () => {
             return new Promise((resolve) => {
                 let i = 0;
-                let files = [
+                const files = [
                     {
                         file: "jsu.js",
                         urlPath: "jsu/master/src/js/jsu.js"
                     }
                 ];
 
-                let fetched = () => {
+                const fetched = () => {
                     i++;
                     if (i === files.length) {
                         resolve();
@@ -101,7 +102,7 @@
          *
          * @returns {Promise}
          */
-        let js = () => {
+        const js = () => {
             return measureTime((resolve) => {
                 Promise.all([
                     func.concat([ // concat extension javascripts
@@ -138,7 +139,7 @@
          *
          * @returns {Promise}
          */
-        let zip = () => {
+        const zip = () => {
             return measureTime((resolve) => {
                 func.zipDirectory(path.dist, process.env.npm_package_name + "_" + process.env.npm_package_version + ".zip").then(resolve);
             }, "Created zip file from dist directory");
@@ -149,7 +150,7 @@
          *
          * @returns {Promise}
          */
-        let html = () => {
+        const html = () => {
             return measureTime((resolve) => {
                 func.minify([path.src + "html/**/*.html"], path.dist, false).then(() => {
                     resolve();
@@ -162,7 +163,7 @@
          *
          * @returns {Promise}
          */
-        let json = () => {
+        const json = () => {
             return measureTime((resolve) => {
                 func.replace({ // parse manifest.json
                     [path.src + "manifest.json"]: path.tmp + "manifest.json"
@@ -185,10 +186,10 @@
          *
          * @returns {Promise}
          */
-        let updateMinimumChromeVersion = () => {
+        const updateMinimumChromeVersion = () => {
             return measureTime((resolve) => {
                 func.getRemoteContent("https://omahaproxy.appspot.com/all.json").then((content) => {
-                    let result = JSON.parse(content);
+                    const result = JSON.parse(content);
                     let currentVersion = null;
 
                     result.some((platform) => {
@@ -207,7 +208,7 @@
                         console.error("Could not determine current Chrome version");
                         process.exit(1);
                     } else {
-                        let minVersion = currentVersion - 4;
+                        const minVersion = currentVersion - 4;
 
                         func.replace({ // update the min version in the manifest
                             [path.src + "manifest.json"]: path.src + "manifest.json"
@@ -228,8 +229,8 @@
          *
          * @returns {Promise}
          */
-        let eslintCheck = async () => {
-            for (let dir of ["build", "src/js"]) {
+        const eslintCheck = async () => {
+            for (const dir of ["build", "src/js"]) {
                 await measureTime(async (resolve) => {
                     func.cmd("eslint --fix " + dir + "/**/*.js").then((obj) => {
                         if (obj.stdout && obj.stdout.trim().length > 0) {
@@ -248,11 +249,11 @@
          * @param {string} msg
          * @returns {Promise}
          */
-        let measureTime = (func, msg) => {
+        const measureTime = (func, msg) => {
             return new Promise((resolve) => {
-                let start = +new Date();
+                const start = +new Date();
                 new Promise(func).then((info) => {
-                    let timeInfo = "[" + (+new Date() - start) + " ms]";
+                    const timeInfo = "[" + (+new Date() - start) + " ms]";
                     console.log(" - " + timeInfo + "" + (" ".repeat(10 - timeInfo.length)) + msg + (info ? (" -> " + info) : ""));
                     resolve();
                 });

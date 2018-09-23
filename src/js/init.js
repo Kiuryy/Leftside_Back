@@ -1,7 +1,7 @@
 (() => {
     "use strict";
 
-    let opts = {
+    const opts = {
         ids: {
             indicator: "blockbyte-lsb-indicator",
         },

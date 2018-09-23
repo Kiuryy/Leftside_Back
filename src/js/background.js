@@ -1,7 +1,7 @@
 ($ => {
     "use strict";
 
-    let background = function () {
+    const background = function () {
 
         this.isDev = false;
         let reinitialized = null;
@@ -9,12 +9,12 @@
         /**
          * Injects the content scripts to all tabs and because of this runs the extension there again
          */
-        let reinitialize = () => {
+        const reinitialize = () => {
             return new Promise((resolve) => {
-                let manifest = chrome.runtime.getManifest();
+                const manifest = chrome.runtime.getManifest();
                 reinitialized = +new Date();
 
-                let types = {
+                const types = {
                     css: "insertCSS",
                     js: "executeScript"
                 };
@@ -23,7 +23,7 @@
                     tabs.forEach((tab) => {
                         if (typeof tab.url === "undefined" || (!tab.url.startsWith("chrome://") && !tab.url.startsWith("chrome-extension://"))) {
                             Object.entries(types).forEach(([type, func]) => {
-                                let files = manifest.content_scripts[0][type];
+                                const files = manifest.content_scripts[0][type];
 
                                 files.forEach((file) => {
                                     chrome.tabs[func](tab.id, {file: file}, function () {
@@ -44,7 +44,7 @@
          *
          * @returns {Promise}
          */
-        let initEvents = async () => {
+        const initEvents = async () => {
             chrome.browserAction.onClicked.addListener(() => { // click on extension icon shall open the sidebar
                 chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                     chrome.tabs.sendMessage(tabs[0].id, {
@@ -61,7 +61,7 @@
          *
          * @returns {Promise}
          */
-        let closeTab = () => {
+        const closeTab = () => {
             return new Promise((resolve) => {
                 chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
                     chrome.tabs.remove(tabs[0].id);
@@ -74,8 +74,8 @@
          *
          * @returns {Promise}
          */
-        let initPort = async () => {
-            let mapping = {
+        const initPort = async () => {
+            const mapping = {
                 closeTab: closeTab,
                 reinitialize: reinitialize
             };
@@ -105,16 +105,17 @@
          *
          */
         this.run = () => {
-            let manifest = chrome.runtime.getManifest();
+            const manifest = chrome.runtime.getManifest();
             this.isDev = manifest.version_name === "Dev" || !("update_url" in manifest);
-            let start = +new Date();
+            const start = +new Date();
 
             Promise.all([
                 initEvents(),
                 initPort()
             ]).then(() => {
-                if (this.isDev && console && console.log) {
-                    console.log("Finished loading background script", +new Date() - start);
+                /* eslint-disable no-console */
+                if (this.isDev && console && console.info) {
+                    console.info("Finished loading background script", +new Date() - start);
                 }
             });
         };
