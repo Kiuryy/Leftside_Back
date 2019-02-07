@@ -1,4 +1,4 @@
-# Leftside Back <img src="src/img/icon/256x256.webp" width="76" align="left" />
+# Leftside Back <img src="src/img/icon/256x256.png" width="88" align="left" />
 
 [![GitHub release](https://img.shields.io/github/release/kiuryy/leftside_back.svg)](https://github.com/Kiuryy/Leftside_Back/releases)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/d/gdcddfacdedphcamippdkojfngoakglg.svg)](https://chrome.google.com/webstore/detail/leftside-back/gdcddfacdedphcamippdkojfngoakglg)
@@ -14,7 +14,7 @@ Chrome extension, which allows you to navigate back by just hitting the mouse on
 </a>
 
 ## Release History
-See the [Release History](https://github.com/Kiuryy/Leftside_Back/releases) for an overview about all versions, or the less detailed [Changelog](changelog.txt).
+See the [Release History](https://github.com/Kiuryy/Leftside_Back/releases) for an overview about all versions.
 
 ## License
 
@@ -22,4 +22,4 @@ This project is licensed under the GNU General Public License v3.0 - see the [li
 
 ## Contact
 
-If you have questions, problems or ideas, please do not hesitate to contact me at <a href="mailto:p.koenig@blockbyte.de">p.koenig@blockbyte.de</a>.
+If you have questions, problems or ideas, please do not hesitate to submit the feedback form of the extension, open an issue here on GitHub or directly contact me at <a href="mailto:p.koenig@blockbyte.de">p.koenig@blockbyte.de</a>.
