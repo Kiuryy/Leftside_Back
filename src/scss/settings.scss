@@ -13,8 +13,9 @@ body {
   font-size: $baseFontSize;
   font-family: $baseFontFamily;
   font-weight: $baseFontWeight;
-  background: $settingsBackgroundColor;
+  background: $backgroundColor1;
   color: $textColor;
+  overflow-x: hidden;
   width: 720px;
 }
 
@@ -26,7 +27,7 @@ section#about {
   padding: 0 15px 5px;
   font-size: 80%;
   text-align: right;
-  background: $settingsBackgroundColor;
+  background: $backgroundColor1;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 2;
 
@@ -116,8 +117,8 @@ section#content {
 }
 
 section#control {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 10px 15px;
+  background: $backgroundColor2;
+  padding: 20px 15px;
   margin-top: 20px;
 
   > button {
@@ -127,17 +128,18 @@ section#control {
     cursor: pointer;
     text-shadow: none;
     box-shadow: none;
-    border-radius: 3px;
+    border-radius: 30px;
 
     &.save {
       color: $textColorInverted;
-      background: $settingsMainColor;
+      background: $mainColor2;
       padding: 3px 12px 4px;
+      font-weight: 400;
     }
 
     &.restore {
       background: transparent;
-      padding: 0 7px;
+      padding: 0 10px;
       font-size: 90%;
       float: right;
       transition: background 0.5s;
@@ -159,7 +161,7 @@ div#savedMsg, div#restoreMsg {
   font-size: 140%;
   text-align: center;
   color: $textColorInverted;
-  background: $settingsSuccessBackgroundColor;
+  background: $colorGreen;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;

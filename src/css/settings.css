@@ -11,6 +11,7 @@ body {
   font-weight: 300;
   background: #fff;
   color: #666;
+  overflow-x: hidden;
   width: 720px; }
 
 section#about {
@@ -82,8 +83,8 @@ section#content {
       font-style: italic; }
 
 section#control {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 10px 15px;
+  background: #f2f2f2;
+  padding: 20px 15px;
   margin-top: 20px; }
   section#control > button {
     display: inline-block;
@@ -92,14 +93,15 @@ section#control {
     cursor: pointer;
     text-shadow: none;
     box-shadow: none;
-    border-radius: 3px; }
+    border-radius: 30px; }
     section#control > button.save {
       color: #fff;
-      background: #7b5fa4;
-      padding: 3px 12px 4px; }
+      background: #6494f4;
+      padding: 3px 12px 4px;
+      font-weight: 400; }
     section#control > button.restore {
       background: transparent;
-      padding: 0 7px;
+      padding: 0 10px;
       font-size: 90%;
       float: right;
       transition: background 0.5s; }
