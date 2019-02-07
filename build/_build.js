@@ -171,7 +171,7 @@
                     [/("content_scripts":[\s\S]*?"js":\s?\[)([\s\S]*?)(\])/mig, "$1\"js/extension.js\"$3"],
                     [/("version":[\s]*")[^"]*("[\s]*,)/ig, "$1" + process.env.npm_package_version + "$2"],
                     [/"version_name":[^,]*,/ig, ""],
-                    [/(img\/icon\/)dev\/(.*)\.png/ig, "$1$2.webp"]
+                    [/(img\/icon\/)dev\/(.*\.png)/ig, "$1$2"]
                 ]).then(() => { // minify in dist directory
                     return func.minify([path.tmp + "manifest.json", path.src + "_locales/**/*.json"], path.dist, false);
                 }).then(() => {
