@@ -1,7 +1,7 @@
 {
   "name": "leftside_back",
-  "version": "1.7.0",
-  "versionName": "1.7.0",
+  "version": "1.7.1",
+  "versionName": "1.7.1",
   "license": "GPL-3.0",
   "author": "Philipp König",
   "homepage": "https://extensions.blockbyte.de/",
@@ -11,23 +11,23 @@
   },
   "scripts": {
     "init": "npm install --only=dev",
-    "release": "ncu -a --packageFile package.json && npm install --only=dev && node build/run.js",
+    "release": "ncu -u --packageFile package.json && npm install --only=dev && node build/run.js",
     "scss": "node-sass --source-map true -o src/css src/scss"
   },
   "devDependencies": {
     "concat": "^1.0.3",
     "create-file": "^1.0.1",
-    "del": "^3.0.0",
-    "eslint": "^5.13.0",
+    "del": "^4.1.0",
+    "eslint": "^5.16.0",
     "fs-extra": "^7.0.1",
     "glob-concat": "^1.0.1",
-    "html-minifier": "^3.5.21",
+    "html-minifier": "^4.0.0",
     "jsonminify": "^0.4.1",
     "node-sass": "^4.11.0",
-    "npm-check-updates": "^2.15.0",
+    "npm-check-updates": "^3.1.4",
     "read-file": "^0.2.0",
     "request": "^2.88.0",
-    "terser": "^3.16.1",
+    "terser": "^3.17.0",
     "zip-dir": "^1.0.2"
   }
 }
