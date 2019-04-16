@@ -192,7 +192,7 @@
                         }
                     });
 
-                    window.addEventListener("mouseout", () => { // Hide indicator when leaving the browser content
+                    document.addEventListener("mouseleave", () => { // Hide indicator when leaving the browser content
                         elm.classList.remove(opts.classes.hover);
                     });
 
