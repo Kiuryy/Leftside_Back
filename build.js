@@ -5,7 +5,16 @@
     /* global Func, path */
 
     global.modulePath = __dirname + "/node_modules/";
-    require("../node.js_build/funcs");
+
+    try {
+        require("../node.js_Build/funcs");
+    } catch (e) {
+        if (e.code !== "MODULE_NOT_FOUND") {
+            throw e;
+        }
+        console.error("Build script is missing. Please download from https://github.com/Kiuryy/node.js_Build");
+        process.exit(1);
+    }
 
     // SCSS Filewatcher -> <PATH_TO_node>/npm.cmd run scss
 
@@ -91,7 +100,7 @@
             const files = [
                 {
                     file: "jsu.js",
-                    urlPath: "jsu/master/src/js/jsu.js"
+                    urlPath: "jsu.js/master/src/js/jsu.js"
                 }
             ];
 
@@ -125,10 +134,10 @@
         return Func.measureTime((resolve) => {
             Promise.all([
                 Func.concat([ // concat extension javascripts
-                    path.src + "js/extension.js",
-                    path.src + "js/init.js"
-                ],
-                path.tmp + "extension-merged.js"
+                        path.src + "js/extension.js",
+                        path.src + "js/init.js"
+                    ],
+                    path.tmp + "extension-merged.js"
                 )
             ]).then(() => { // merge anonymous brackets
                 return Func.replace({
