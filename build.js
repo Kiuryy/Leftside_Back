@@ -134,10 +134,10 @@
         return Func.measureTime((resolve) => {
             Promise.all([
                 Func.concat([ // concat extension javascripts
-                        path.src + "js/extension.js",
-                        path.src + "js/init.js"
-                    ],
-                    path.tmp + "extension-merged.js"
+                    path.src + "js/extension.js",
+                    path.src + "js/init.js"
+                ],
+                path.tmp + "extension-merged.js"
                 )
             ]).then(() => { // merge anonymous brackets
                 return Func.replace({

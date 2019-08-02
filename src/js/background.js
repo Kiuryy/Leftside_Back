@@ -6,6 +6,10 @@
         this.isDev = false;
         let reinitialized = null;
 
+        const urls = {
+            privacy: "https://extensions.blockbyte.de/privacy/lsb"
+        };
+
         /**
          * Injects the content scripts to all tabs and because of this runs the extension there again
          */
@@ -103,6 +107,55 @@
 
         /**
          *
+         * @returns {Promise}
+         */
+        const initContextmenus = () => {
+            return new Promise((resolve) => {
+                chrome.contextMenus.removeAll(() => {
+                    const uid = Math.random().toString(36).substr(2, 12);
+
+                    chrome.contextMenus.create({
+                        id: "lsbPrivacy_" + uid,
+                        title: "Privacy", // @toDo dynamic
+                        contexts: ["browser_action"]
+                    });
+
+                    chrome.contextMenus.onClicked.addListener((obj) => {
+                        if (obj.menuItemId === "lsbPrivacy_" + uid) {
+                            openURL(urls.privacy, {lang: chrome.i18n.getUILanguage()});
+                        }
+                    });
+
+                    resolve();
+                });
+            });
+        };
+
+        /**
+         * Opens the given URL in a new tab and appends the given parameters to the URL
+         *
+         * @param {string} url
+         * @param {object} params
+         */
+        const openURL = (url, params) => {
+            if (params) {
+                url += "?" + Object.entries(params).map(([key, val]) => {
+                    return encodeURIComponent(key) + "=" + val;
+                }).join("&");
+            }
+
+            chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+                chrome.tabs.create({
+                    url: url,
+                    active: true,
+                    index: tabs[0].index + 1,
+                    openerTabId: tabs[0].id
+                });
+            });
+        };
+
+        /**
+         *
          */
         this.run = () => {
             const manifest = chrome.runtime.getManifest();
@@ -111,6 +164,7 @@
 
             Promise.all([
                 initEvents(),
+                initContextmenus(),
                 initPort()
             ]).then(() => {
                 /* eslint-disable no-console */
