@@ -124,21 +124,21 @@
                 }
             }, () => {
                 this.opts.elm.body.addClass(this.opts.classes.saved);
-                setTimeout(() => {
+                $.delay(1500).then(() => {
                     this.opts.elm.body.removeClass(this.opts.classes.saved);
-                }, 1500);
+                });
             });
         };
 
         const restore = () => { // restore default settings
             chrome.storage.sync.remove(["showIndicator", "closeTab", "navigateForward", "pxTolerance", "openAction"], () => {
                 this.opts.elm.body.addClass(this.opts.classes.restored);
-                setTimeout(() => {
+                $.delay(1500).then(() => {
                     this.opts.elm.body.removeClass(this.opts.classes.restored);
-                    setTimeout(() => {
+                    $.delay(100).then(() => {
                         location.reload();
-                    }, 100);
-                }, 1500);
+                    });
+                });
             });
         };
 
