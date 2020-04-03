@@ -11,8 +11,11 @@ $mainColor1: #8741ed;
 $mainColor2: #6494f4;
 $mainColor3: #00e5fd;
 
+$gradient: linear-gradient(45deg, $mainColor1 0%, $mainColor3 100%);
+
 $backgroundColor1: #fff;
 $backgroundColor2: #f2f2f2;
+$backgroundColor3: #322e2f;
 
 $__indicatorWidth: 40px;
 $__indicatorColor: rgba(0, 0, 0, 0.5);

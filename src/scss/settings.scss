@@ -13,177 +13,230 @@ body {
   font-size: $baseFontSize;
   font-family: $baseFontFamily;
   font-weight: $baseFontWeight;
-  background: $backgroundColor1;
+  background: $backgroundColor2;
   color: $textColor;
-  overflow-x: hidden;
-  width: 720px;
 }
 
-section#about {
-  position: fixed;
-  top: 0;
-  left: 0;
+section#wrapper {
   width: 100%;
-  padding: 0 15px 5px;
-  font-size: 80%;
-  text-align: right;
+  max-width: 800px;
+  margin: 30px auto;
   background: $backgroundColor1;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  z-index: 2;
-
-  > a {
-    color: $textColor;
-    text-decoration: none;
-    font-weight: 400;
-  }
-}
-
-section#content {
-  padding: 20px;
+  box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
   transition: opacity 0.3s;
 
-  div.box {
-    margin-top: 30px;
+  > header {
+    background: $backgroundColor3;
+    padding: 18px 25px 15px 25px;
 
-    span.subLabel {
+    h1 {
       display: inline-block;
+      color: $textColorInverted;
+      font-size: 180%;
+      font-weight: 300;
       vertical-align: top;
-      font-style: italic;
-      margin: 0 10px 0 20px;
+      margin: 16px 0 0 25px;
     }
 
-    label {
+    div#logo {
+      position: relative;
       display: inline-block;
-      vertical-align: top;
-      font-weight: 400;
-      margin-right: 15px;
+      width: 64px;
+      height: 64px;
 
-      + span.subLabel {
-        margin-left: 0;
+      > span {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: img('icon/icon.png') no-repeat center / 40px;
+        z-index: 3;
+      }
+
+      &::before, &::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+      }
+
+      &::before {
+        top: -4px;
+        left: -4px;
+        width: calc(100% + 8px);
+        height: calc(100% + 8px);
+        background: $gradient;
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+        z-index: 1;
+      }
+
+      &::after {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: $backgroundColor3;
+        z-index: 2;
       }
     }
+  }
 
-    input {
-      display: inline-block;
-      vertical-align: top;
+  > main {
+    padding: 25px 20px;
+    transition: opacity 0.3s;
 
-      &[type='checkbox'] {
-        margin-top: 3px;
+    div.box {
+
+      + div.box {
+        margin-top: 30px;
       }
 
-      &[type='range'] {
+      span.subLabel {
+        display: inline-block;
+        vertical-align: top;
+        font-style: italic;
+        margin: 0 10px 0 20px;
+      }
 
-        + span {
-          position: relative;
-          display: inline-block;
-          background: rgba(0, 0, 0, 0.1);
-          color: $textColor;
-          font-size: 70%;
-          padding: 2px 5px 3px;
-          margin: 0 0 0 6px;
-          text-align: center;
-          min-width: 35px;
-          transition: opacity 0.3s;
+      label {
+        display: inline-block;
+        vertical-align: top;
+        font-weight: 400;
+        margin-right: 15px;
 
-          &::before {
-            content: "";
-            position: absolute;
-            top: calc(50% - 4px);
-            left: -8px;
-            border: 4px solid transparent;
-            border-right-color: rgba(0, 0, 0, 0.1);
-          }
+        + span.subLabel {
+          margin-left: 0;
+        }
+      }
 
-          &::after {
-            content: attr(data-unit);
+      input {
+        display: inline-block;
+        vertical-align: top;
+
+        &[type='checkbox'] {
+          margin-top: 3px;
+        }
+
+        &[type='range'] {
+
+          + span {
+            position: relative;
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.1);
+            color: $textColor;
+            font-size: 70%;
+            padding: 2px 5px 3px;
+            margin: 0 0 0 6px;
+            text-align: center;
+            min-width: 35px;
+            transition: opacity 0.3s;
+
+            &::before {
+              content: "";
+              position: absolute;
+              top: calc(50% - 4px);
+              left: -8px;
+              border: 4px solid transparent;
+              border-right-color: rgba(0, 0, 0, 0.1);
+            }
+
+            &::after {
+              content: attr(data-unit);
+            }
           }
         }
       }
-    }
 
-    select {
-      display: inline-block;
-      vertical-align: top;
-      margin-top: -4px;
-    }
+      select {
+        display: inline-block;
+        vertical-align: top;
+      }
 
-    p {
-      font-size: 90%;
-      color: $textColorLight;
-      margin-top: 7px;
-      font-style: italic;
+      p {
+        font-size: 90%;
+        color: $textColorLight;
+        margin-top: 7px;
+        font-style: italic;
+      }
     }
   }
-}
 
-section#control {
-  background: $backgroundColor2;
-  padding: 20px 15px;
-  margin-top: 20px;
+  section#control {
+    background: $backgroundColor2;
+    padding: 20px 15px;
+    margin-top: 20px;
 
-  > button {
-    display: inline-block;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    text-shadow: none;
-    box-shadow: none;
-    border-radius: 30px;
+    > button {
+      display: inline-block;
+      outline: none;
+      border: none;
+      cursor: pointer;
+      text-shadow: none;
+      box-shadow: none;
+      border-radius: 30px;
 
-    &.save {
-      color: $textColorInverted;
-      background: $mainColor2;
-      padding: 3px 12px 4px;
-      font-weight: 400;
-    }
+      &.save {
+        color: $textColorInverted;
+        background: $mainColor2;
+        font-weight: 200;
+        font-size: 105%;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 14px;
+      }
 
-    &.restore {
-      background: transparent;
-      padding: 0 10px;
-      font-size: 90%;
-      float: right;
-      transition: background 0.5s;
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.05);
+      &.restore {
+        background: transparent;
+        padding: 5px;
+        margin: 5px 0 0 10px;
+        font-size: 90%;
+        color: $textColorLight;
       }
     }
   }
 }
 
+
 div#savedMsg, div#restoreMsg {
   position: fixed;
-  top: calc(50% - 50px);
+  top: 70px;
   left: 0;
-  width: 100%;
-  height: 55px;
-  padding: 15px 0;
-  font-size: 140%;
+  right: 0;
+  margin: auto;
   text-align: center;
-  color: $textColorInverted;
-  background: $colorGreen;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s;
+  transform: translate3d(0, -50px, 0);
+  transition: opacity 0.5s, transform 0.5s;
+
+  > span {
+    display: inline-block;
+    padding: 40px 100px;
+    font-size: 140%;
+    color: $textColorInverted;
+    background: $colorGreen;
+  }
 }
 
 body {
 
   &.saved, &.restored {
 
-    section#content, section#control {
-      opacity: 0.2;
+    section#wrapper {
+      opacity: 0.3;
+      filter: blur(10px);
       pointer-events: none;
     }
   }
 
   &.saved div#savedMsg {
     opacity: 1;
-    pointer-events: auto;
+    transform: translate3d(0, 0, 0);
   }
 
   &.restored div#restoreMsg {
     opacity: 1;
-    pointer-events: auto;
+    transform: translate3d(0, 0, 0);
   }
 }

@@ -38,7 +38,7 @@
   ],
   "options_ui": {
     "page": "html/settings.html",
-    "chrome_style": true
+    "open_in_tab": true
   },
   "icons": {
     "256": "img/icon/dev/256x256.png",

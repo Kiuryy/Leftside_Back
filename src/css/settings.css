@@ -9,50 +9,82 @@ body {
   font-size: 14px;
   font-family: Roboto, sans-serif;
   font-weight: 300;
-  background: #fff;
-  color: #666;
-  overflow-x: hidden;
-  width: 720px; }
+  background: #f2f2f2;
+  color: #666; }
 
-section#about {
-  position: fixed;
-  top: 0;
-  left: 0;
+section#wrapper {
   width: 100%;
-  padding: 0 15px 5px;
-  font-size: 80%;
-  text-align: right;
+  max-width: 800px;
+  margin: 30px auto;
   background: #fff;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  z-index: 2; }
-  section#about > a {
-    color: #666;
-    text-decoration: none;
-    font-weight: 400; }
-
-section#content {
-  padding: 20px;
+  box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
   transition: opacity 0.3s; }
-  section#content div.box {
-    margin-top: 30px; }
-    section#content div.box span.subLabel {
+  section#wrapper > header {
+    background: #322e2f;
+    padding: 18px 25px 15px 25px; }
+    section#wrapper > header h1 {
+      display: inline-block;
+      color: #fff;
+      font-size: 180%;
+      font-weight: 300;
+      vertical-align: top;
+      margin: 16px 0 0 25px; }
+    section#wrapper > header div#logo {
+      position: relative;
+      display: inline-block;
+      width: 64px;
+      height: 64px; }
+      section#wrapper > header div#logo > span {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: url(chrome-extension://__MSG_@@extension_id__/img/icon/icon.png) no-repeat center/40px;
+        z-index: 3; }
+      section#wrapper > header div#logo::before, section#wrapper > header div#logo::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%; }
+      section#wrapper > header div#logo::before {
+        top: -4px;
+        left: -4px;
+        width: calc(100% + 8px);
+        height: calc(100% + 8px);
+        background: linear-gradient(45deg, #8741ed 0%, #00e5fd 100%);
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+        z-index: 1; }
+      section#wrapper > header div#logo::after {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #322e2f;
+        z-index: 2; }
+  section#wrapper > main {
+    padding: 25px 20px;
+    transition: opacity 0.3s; }
+    section#wrapper > main div.box + div.box {
+      margin-top: 30px; }
+    section#wrapper > main div.box span.subLabel {
       display: inline-block;
       vertical-align: top;
       font-style: italic;
       margin: 0 10px 0 20px; }
-    section#content div.box label {
+    section#wrapper > main div.box label {
       display: inline-block;
       vertical-align: top;
       font-weight: 400;
       margin-right: 15px; }
-      section#content div.box label + span.subLabel {
+      section#wrapper > main div.box label + span.subLabel {
         margin-left: 0; }
-    section#content div.box input {
+    section#wrapper > main div.box input {
       display: inline-block;
       vertical-align: top; }
-      section#content div.box input[type='checkbox'] {
+      section#wrapper > main div.box input[type='checkbox'] {
         margin-top: 3px; }
-      section#content div.box input[type='range'] + span {
+      section#wrapper > main div.box input[type='range'] + span {
         position: relative;
         display: inline-block;
         background: rgba(0, 0, 0, 0.1);
@@ -63,76 +95,79 @@ section#content {
         text-align: center;
         min-width: 35px;
         transition: opacity 0.3s; }
-        section#content div.box input[type='range'] + span::before {
+        section#wrapper > main div.box input[type='range'] + span::before {
           content: "";
           position: absolute;
           top: calc(50% - 4px);
           left: -8px;
           border: 4px solid transparent;
           border-right-color: rgba(0, 0, 0, 0.1); }
-        section#content div.box input[type='range'] + span::after {
+        section#wrapper > main div.box input[type='range'] + span::after {
           content: attr(data-unit); }
-    section#content div.box select {
+    section#wrapper > main div.box select {
       display: inline-block;
-      vertical-align: top;
-      margin-top: -4px; }
-    section#content div.box p {
+      vertical-align: top; }
+    section#wrapper > main div.box p {
       font-size: 90%;
       color: #aaa;
       margin-top: 7px;
       font-style: italic; }
-
-section#control {
-  background: #f2f2f2;
-  padding: 20px 15px;
-  margin-top: 20px; }
-  section#control > button {
-    display: inline-block;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    text-shadow: none;
-    box-shadow: none;
-    border-radius: 30px; }
-    section#control > button.save {
-      color: #fff;
-      background: #6494f4;
-      padding: 3px 12px 4px;
-      font-weight: 400; }
-    section#control > button.restore {
-      background: transparent;
-      padding: 0 10px;
-      font-size: 90%;
-      float: right;
-      transition: background 0.5s; }
-      section#control > button.restore:hover {
-        background: rgba(0, 0, 0, 0.05); }
+  section#wrapper section#control {
+    background: #f2f2f2;
+    padding: 20px 15px;
+    margin-top: 20px; }
+    section#wrapper section#control > button {
+      display: inline-block;
+      outline: none;
+      border: none;
+      cursor: pointer;
+      text-shadow: none;
+      box-shadow: none;
+      border-radius: 30px; }
+      section#wrapper section#control > button.save {
+        color: #fff;
+        background: #6494f4;
+        font-weight: 200;
+        font-size: 105%;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 14px; }
+      section#wrapper section#control > button.restore {
+        background: transparent;
+        padding: 5px;
+        margin: 5px 0 0 10px;
+        font-size: 90%;
+        color: #aaa; }
 
 div#savedMsg, div#restoreMsg {
   position: fixed;
-  top: calc(50% - 50px);
+  top: 70px;
   left: 0;
-  width: 100%;
-  height: 55px;
-  padding: 15px 0;
-  font-size: 140%;
+  right: 0;
+  margin: auto;
   text-align: center;
-  color: #fff;
-  background: #5eba7d;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s; }
+  transform: translate3d(0, -50px, 0);
+  transition: opacity 0.5s, transform 0.5s; }
+  div#savedMsg > span, div#restoreMsg > span {
+    display: inline-block;
+    padding: 40px 100px;
+    font-size: 140%;
+    color: #fff;
+    background: #5eba7d; }
 
-body.saved section#content, body.saved section#control, body.restored section#content, body.restored section#control {
-  opacity: 0.2;
+body.saved section#wrapper, body.restored section#wrapper {
+  opacity: 0.3;
+  filter: blur(10px);
   pointer-events: none; }
 
 body.saved div#savedMsg {
   opacity: 1;
-  pointer-events: auto; }
+  transform: translate3d(0, 0, 0); }
 
 body.restored div#restoreMsg {
   opacity: 1;
-  pointer-events: auto; }
+  transform: translate3d(0, 0, 0); }
 
 /*# sourceMappingURL=settings.css.map */

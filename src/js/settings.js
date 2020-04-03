@@ -56,7 +56,7 @@
                 $(elm).text(chrome.i18n.getMessage("settings_" + val));
             });
 
-            this.opts.elm.title.text(this.opts.manifest.short_name + " - " + this.opts.elm.title.text());
+            this.opts.elm.title.text(this.opts.elm.title.text() + " - " + this.opts.manifest.short_name);
         };
 
         const initEvents = () => {
@@ -136,7 +136,7 @@
                 setTimeout(() => {
                     this.opts.elm.body.removeClass(this.opts.classes.restored);
                     setTimeout(() => {
-                        window.close();
+                        location.reload();
                     }, 100);
                 }, 1500);
             });
