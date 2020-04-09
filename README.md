@@ -7,11 +7,12 @@
 
 ---
 
-Chrome extension, which allows you to navigate back by just hitting the mouse on the left side of your screen.
+Leftside Back is a browser extension, which allows you to navigate back by just hitting the mouse on the left or right side of your screen.
 
-<a href="https://chrome.google.com/webstore/detail/leftside-back/gdcddfacdedphcamippdkojfngoakglg" target="_blank">
-<img src="https://extensions.blockbyte.de/img/chromeWebStore_border.png" width="200" />
-</a>
+<a href="https://chrome.google.com/webstore/detail/leftside-back/gdcddfacdedphcamippdkojfngoakglg" target="_blank"><img src="https://extensions.blockbyte.de/img/github_download_chrome.png" width="160" /></a>&ensp;
+<a href="https://microsoftedge.microsoft.com/addons/detail/mmngidlfomfhnbfnfffalafojhobiddj" target="_blank"><img src="https://extensions.blockbyte.de/img/github_download_edge.png" width="160" /></a>
+
+The extension should work with all Chromium-based browsers, while officially only Chrome and Edge are fully supported.
 
 ## Release History
 See the [Release History](https://github.com/Kiuryy/Leftside_Back/releases) for an overview about all versions.
