@@ -17,16 +17,16 @@ body > div#blockbyte-lsb-indicator {
   z-index: 2147483644; }
   body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible > div {
     position: absolute;
-    transform: translate3d(-40px, 0, 0);
+    transform: translate3d(-24px, 0, 0);
     top: 0;
     left: 0;
-    width: 40px !important;
+    width: 24px !important;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s, transform 0.3s;
     z-index: 2; }
     body > div#blockbyte-lsb-indicator.blockbyte-lsb-visible > div > span {
-      background: url(chrome-extension://__MSG_@@extension_id__/img/arrow.webp) no-repeat center/32px;
+      background: url(chrome-extension://__MSG_@@extension_id__/img/arrow.webp) no-repeat center/24px;
       z-index: 2;
       position: absolute;
       display: block;

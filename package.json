@@ -1,7 +1,7 @@
 {
   "name": "leftside_back",
-  "version": "1.8.0",
-  "versionName": "1.8.0",
+  "version": "1.8.1",
+  "versionName": "1.8.1",
   "license": "GPL-3.0",
   "author": "Philipp König",
   "homepage": "https://extensions.blockbyte.de/",
@@ -23,11 +23,11 @@
     "glob-concat": "^1.0.1",
     "html-minifier": "^4.0.0",
     "jsonminify": "^0.4.1",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.0",
     "npm-check-updates": "^4.1.2",
     "read-file": "^0.2.0",
     "request": "^2.88.2",
-    "terser": "^4.6.11",
+    "terser": "^4.6.12",
     "zip-dir": "^1.0.2"
   }
 }

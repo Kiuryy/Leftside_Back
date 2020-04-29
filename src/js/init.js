@@ -18,7 +18,7 @@
             showIndicator: true,
             closeTab: false,
             navigateForward: false,
-            indicatorWidth: 40
+            indicatorWidth: 24
         }
     };
 
