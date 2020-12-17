@@ -9,8 +9,8 @@
 
 Leftside Back is a browser extension, which allows you to navigate back by just hitting the mouse on the left or right side of your screen.
 
-<a href="https://chrome.google.com/webstore/detail/leftside-back/gdcddfacdedphcamippdkojfngoakglg" target="_blank"><img src="https://extensions.blockbyte.de/img/github_download_chrome.png" width="160" /></a>&ensp;
-<a href="https://microsoftedge.microsoft.com/addons/detail/mmngidlfomfhnbfnfffalafojhobiddj" target="_blank"><img src="https://extensions.blockbyte.de/img/github_download_edge.png" width="160" /></a>
+<a href="https://chrome.google.com/webstore/detail/leftside-back/gdcddfacdedphcamippdkojfngoakglg" target="_blank"><img src="https://extensions.redeviation.com/img/github_download_chrome.png" width="160" /></a>&ensp;
+<a href="https://microsoftedge.microsoft.com/addons/detail/mmngidlfomfhnbfnfffalafojhobiddj" target="_blank"><img src="https://extensions.redeviation.com/img/github_download_edge.png" width="160" /></a>
 
 The extension should work with all Chromium-based browsers, while officially only Chrome and Edge are fully supported.
 
@@ -23,4 +23,4 @@ This project is licensed under the GNU General Public License v3.0 - see the [li
 
 ## Contact
 
-If you have questions, problems or ideas, please do not hesitate to submit the feedback form of the extension, open an issue here on GitHub or directly contact me at <a href="mailto:p.koenig@blockbyte.de">p.koenig@blockbyte.de</a>.
+If you have questions, problems or ideas, please do not hesitate to submit the feedback form of the extension, open an issue here on GitHub or directly contact me at <a href="mailto:philipp.koenig@redeviation.com">philipp.koenig@redeviation.com</a>.

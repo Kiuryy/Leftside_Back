@@ -7,7 +7,7 @@
         let reinitialized = null;
 
         const urls = {
-            privacy: "https://extensions.blockbyte.de/privacy/lsb"
+            privacy: "https://extensions.redeviation.com/privacy/lsb"
         };
 
         /**

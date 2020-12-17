@@ -1,7 +1,7 @@
 @import "include/vars";
 @import "include/mixins";
 
-body > div#blockbyte-lsb-indicator {
+body > div#redeviation-lsb-indicator {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@ body > div#blockbyte-lsb-indicator {
   padding: 0;
   z-index: #{2147483647 - 3};
 
-  &.blockbyte-lsb-visible {
+  &.redeviation-lsb-visible {
 
     > div {
       position: absolute;
@@ -36,7 +36,8 @@ body > div#blockbyte-lsb-indicator {
         height: 100%;
       }
     }
-    &.blockbyte-lsb-hover { // hover
+
+    &.redeviation-lsb-hover { // hover
 
       > div {
         transform: translate3d(0, 0, 0);

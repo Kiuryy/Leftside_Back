@@ -3,14 +3,14 @@
 
     const opts = {
         ids: {
-            indicator: "blockbyte-lsb-indicator",
+            indicator: "redeviation-lsb-indicator",
         },
         classes: {
-            visible: "blockbyte-lsb-visible",
-            hover: "blockbyte-lsb-hover"
+            visible: "redeviation-lsb-visible",
+            hover: "redeviation-lsb-hover"
         },
         events: {
-            loaded: "blockbyte-lsb-loaded"
+            loaded: "redeviation-lsb-loaded"
         },
         config: {
             pxTolerance: {windowed: 20, maximized: 1},
