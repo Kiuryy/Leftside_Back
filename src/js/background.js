@@ -30,7 +30,7 @@
                                 const files = manifest.content_scripts[0][type];
 
                                 files.forEach((file) => {
-                                    chrome.tabs[func](tab.id, {file: file}, function () {
+                                    chrome.tabs[func](tab.id, {file: file}, () => {
                                         chrome.runtime.lastError; // do nothing specific with the error -> is thrown if the tab cannot be accessed (like chrome:// urls)
                                     });
                                 });
