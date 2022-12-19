@@ -14,7 +14,6 @@
          * Injects the content scripts to all tabs and therefore runs the extension there again
          */
         const reinitialize = async () => {
-
             const manifest = chrome.runtime.getManifest();
             reinitialized = +new Date();
 
@@ -43,7 +42,7 @@
          * Initialises the eventhandlers
          */
         const initEvents = () => {
-            chrome.browserAction.onClicked.addListener(async () => { // click on extension icon shall open the sidebar
+            chrome.action.onClicked.addListener(async () => { // click on extension icon shall open the sidebar
                 const tabs = await chrome.tabs.query({active: true, currentWindow: true});
                 chrome.tabs.sendMessage(tabs[0].id, {
                     action: "navigateBack",
@@ -103,7 +102,7 @@
             chrome.contextMenus.create({
                 id: "lsbPrivacy_" + uid,
                 title: "Privacy", // TODO dynamic
-                contexts: ["browser_action"]
+                contexts: ["action"]
             });
 
             chrome.contextMenus.onClicked.addListener(async (obj) => {
@@ -144,8 +143,8 @@
             const start = +new Date();
 
             initEvents();
-            await initContextmenus();
             initMessaging();
+            await initContextmenus();
 
             /* eslint-disable no-console */
             if (this.isDev && console && console.info) {

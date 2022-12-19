@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_extension_name__",
   "short_name": "__MSG_extension_name__",
   "description": "__MSG_extension_desc__",
@@ -9,11 +9,7 @@
   "minimum_chrome_version": "103",
   "homepage_url": "https://extensions.redeviation.com/",
   "background": {
-    "scripts": [
-      "js/lib/jsu.js",
-      "js/background.js"
-    ],
-    "persistent": false
+    "service_worker": "js/background.js"
   },
   "content_scripts": [
     {
@@ -30,11 +26,18 @@
       "run_at": "document_start"
     }
   ],
-  "browser_action": {
+  "action": {
     "default_icon": "img/icon/dev/128x128.png"
   },
   "web_accessible_resources": [
-    "img/*"
+    {
+      "resources": [
+        "img/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
   ],
   "options_ui": {
     "page": "html/settings.html",
@@ -45,8 +48,10 @@
     "128": "img/icon/dev/128x128.png",
     "48": "img/icon/dev/48x48.png"
   },
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "permissions": [
-    "<all_urls>",
     "contextMenus",
     "storage"
   ]

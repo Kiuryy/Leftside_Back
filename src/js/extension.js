@@ -156,13 +156,22 @@
                 initIndicator();
             });
 
-            chrome.extension.onMessage.addListener(async (message) => { // listen for events from the background script
-                if (message && message.action && (message.reinitialized === null || this.initialized > message.reinitialized)) { // background is not reinitialized after the creation of this instance of the script -> perform the action
-                    if (message.action === "navigateBack") { //
-                        await navigateBack();
-                    }
+            // listen for events from the background script
+            chrome.runtime.onMessage.removeListener(handleBackgroundMessage);
+            chrome.runtime.onMessage.addListener(handleBackgroundMessage);
+        };
+
+        /**
+         * Handles the received message from the background script
+         *
+         * @param {object} message
+         */
+        const handleBackgroundMessage = async (message) => {
+            if (message && message.action && (message.reinitialized === null || this.initialized > message.reinitialized)) { // background is not reinitialized after the creation of this instance of the script -> perform the action
+                if (message.action === "navigateBack") {
+                    await navigateBack();
                 }
-            });
+            }
         };
 
         /**

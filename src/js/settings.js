@@ -81,23 +81,22 @@
                 this.opts.elm.creationDate.text(createdDate + " - " + currentYear);
             }
 
-            const showIndicator = await chrome.storage.sync.get("showIndicator");
-            this.opts.elm.showIndicator[0].checked = typeof showIndicator === "undefined" ? true : (showIndicator === true);
+            const opts = await chrome.storage.sync.get([
+                "showIndicator",
+                "closeTab",
+                "navigateForward",
+                "openAction",
+                "pxTolerance"
+            ]);
 
-            const closeTab = chrome.storage.sync.get("closeTab");
-            this.opts.elm.closeTab[0].checked = typeof closeTab === "undefined" ? false : (closeTab === true);
+            this.opts.elm.showIndicator[0].checked = typeof opts.showIndicator === "undefined" ? true : (opts.showIndicator === true);
+            this.opts.elm.closeTab[0].checked = typeof opts.closeTab === "undefined" ? false : (opts.closeTab === true);
+            this.opts.elm.navigateForward[0].checked = typeof opts.navigateForward === "undefined" ? false : (opts.navigateForward === true);
+            this.opts.elm.openAction[0].value = typeof opts.openAction === "undefined" ? "mousedown" : opts.openAction;
 
-            const navigateForward = chrome.storage.sync.get("navigateForward");
-            this.opts.elm.navigateForward[0].checked = typeof navigateForward === "undefined" ? false : (navigateForward === true);
-
-            const openAction = chrome.storage.sync.get("openAction");
-            this.opts.elm.openAction[0].value = typeof openAction === "undefined" ? "mousedown" : openAction;
-
-            const pxTolerance = chrome.storage.sync.get("pxTolerance");
             let pxToleranceObj = {windowed: 20, maximized: 1};
-
-            if (typeof pxTolerance !== "undefined") {
-                pxToleranceObj = pxTolerance;
+            if (typeof opts.pxTolerance !== "undefined") {
+                pxToleranceObj = opts.pxTolerance;
             }
 
             this.opts.elm.pxToleranceMaximized[0].value = pxToleranceObj.maximized;
