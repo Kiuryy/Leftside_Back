@@ -3,8 +3,6 @@
 
     window.ext = function (opts) {
 
-        let port = null;
-        const callbacks = {};
         let mouseNotTopLeft = false;
         const configFields = ["pxTolerance", "showIndicator", "closeTab", "navigateForward", "openAction"];
 
@@ -19,9 +17,8 @@
         /**
          * Constructor
          */
-        this.run = () => {
-            initPort();
-            initConfig();
+        this.run = async () => {
+            await initConfig();
             this.initialized = +new Date();
         };
 
@@ -37,23 +34,22 @@
          * @returns {Promise}
          */
         const initConfig = async () => {
-            chrome.storage.sync.get(configFields, (obj) => {
-                configFields.forEach((field) => {
-                    if (typeof obj[field] !== "undefined") {
-                        opts.config[field] = obj[field];
-                    }
-                });
-
-                if (matchMedia("(min-resolution: 1.25dppx)").matches) { // hdpi monitor -> increase pixel tolerance by one
-                    Object.keys(opts.config.pxTolerance).forEach((key) => {
-                        opts.config.pxTolerance[key]++;
-                    });
+            const obj = await chrome.storage.sync.get(configFields);
+            configFields.forEach((field) => {
+                if (typeof obj[field] !== "undefined") {
+                    opts.config[field] = obj[field];
                 }
-
-                initEvents();
-                initIndicator();
-                extensionLoaded();
             });
+
+            if (matchMedia("(min-resolution: 1.25dppx)").matches) { // hdpi monitor -> increase pixel tolerance by one
+                Object.keys(opts.config.pxTolerance).forEach((key) => {
+                    opts.config.pxTolerance[key]++;
+                });
+            }
+
+            initEvents();
+            initIndicator();
+            extensionLoaded();
         };
 
         /**
@@ -62,60 +58,61 @@
          * @returns {int}
          */
         const getPixelTolerance = () => {
-            const isWindowed = window.screenX !== 0 || window.screenY !== 0 || window.screen.availWidth !== window.innerWidth;
+            const limitX = 100;
+            const limitY = 50;
+            const isWindowed = window.screenX > limitX ||
+                window.screenY > limitY ||
+                Math.abs(window.screen.availWidth - window.innerWidth) > limitY ||
+                (window.navigator && window.navigator && window.navigator.userAgent && window.navigator.userAgent && window.navigator.userAgent.search(/[/\s-_]mobile[/\s-_]/i) > -1);
+
             return +opts.config.pxTolerance[isWindowed ? "windowed" : "maximized"];
         };
 
-        /**
-         * Initialises the port to the background script
-         *
-         * @returns {Promise}
-         */
-        const initPort = async () => {
-            if (port) {
-                port.disconnect();
-            }
-
-            port = chrome.runtime.connect({name: "background"});
-
-            port.onMessage.addListener((obj) => {
-                if (callbacks[obj.uid]) {
-                    callbacks[obj.uid](obj.result);
-                    delete callbacks[obj.uid];
-                }
-            });
-        };
 
         /**
          * Sends a message to the background script and resolves when receiving a response
          *
          * @param {string} key
          * @param {object} opts
+         * @param {number} retry
          * @returns {Promise}
          */
-        const sendMessage = (key, opts = {}) => {
-            return new Promise((resolve) => {
-                if (port) {
-                    opts.type = key;
-                    opts.uid = key + "_" + JSON.stringify(opts) + "_" + (+new Date()) + Math.random().toString(36).substr(2, 12);
+        const sendMessage = async (key, opts = {}, retry = 0) => {
+            let backendDead = false;
+            opts.type = key;
 
-                    callbacks[opts.uid] = (response) => {
-                        resolve(response);
-                    };
-
-                    try { // can fail if port is closed in the meantime
-                        port.postMessage(opts);
-                    } catch (e) {
-                        //
-                    }
+            let response = await chrome.runtime.sendMessage(opts)["catch"]((err) => {
+                if (err && ("" + err).includes("Could not establish connection")) {
+                    backendDead = true;
+                } else {
+                    console.error(err);
                 }
+            });
+
+            if (backendDead && retry < 50) { // backend got killed by the browser -> it should restart and be available after a short delay, so we try again
+                await delay(100);
+                response = await sendMessage(key, opts, retry + 1);
+            }
+
+            return response;
+        };
+
+        /**
+         * Returns a promise after the given time in ms
+         *
+         * @param t
+         * @returns Promise
+         */
+        const delay = (t = 0) => {
+            return new Promise((resolve) => {
+                setTimeout(resolve, t);
             });
         };
 
         /**
          * Navigates back in history or closes the tab if there is no other history entry
          */
-        const navigateBack = () => {
+        const navigateBack = async () => {
             let useFallback = true;
             window.onbeforeunload = window.onpopstate = () => {
                 useFallback = false;
@@ -123,11 +120,10 @@
 
             window.history.back();
 
-            setTimeout(() => {
-                if (opts.config.closeTab && useFallback) {
-                    sendMessage("closeTab");
-                }
-            }, 200);
+            await delay(200);
+            if (opts.config.closeTab && useFallback) {
+                await sendMessage("closeTab");
+            }
         };
 
         /**
@@ -142,13 +138,13 @@
          */
         const initEvents = () => {
             ["mousedown", "contextmenu"].forEach((eventName) => {
-                document.addEventListener(eventName, (e) => {
+                document.addEventListener(eventName, async (e) => {
                     if (e.isTrusted && (eventName !== "mousedown" || e.button === 0) && isMousePosInPixelTolerance(e.pageX, e.pageY)) { // check mouse position and mouse button
                         e.stopPropagation();
                         e.preventDefault();
 
                         if (eventName === opts.config.openAction) {
-                            navigateBack();
+                            await navigateBack();
                         } else if (opts.config.navigateForward) {
                             navigateForward();
                         }
@@ -160,10 +156,10 @@
                 initIndicator();
             });
 
-            chrome.extension.onMessage.addListener((message) => { // listen for events from the background script
+            chrome.extension.onMessage.addListener(async (message) => { // listen for events from the background script
                 if (message && message.action && (message.reinitialized === null || this.initialized > message.reinitialized)) { // background is not reinitialized after the creation of this instance of the script -> perform the action
                     if (message.action === "navigateBack") { //
-                        navigateBack();
+                        await navigateBack();
                     }
                 }
             });

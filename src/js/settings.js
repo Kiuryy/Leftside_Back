@@ -38,10 +38,10 @@
         /**
          * Constructor
          */
-        this.run = () => {
+        this.run = async () => {
             initLanguage();
             initEvents();
-            initSettings();
+            await initSettings();
         };
 
         /*
@@ -64,16 +64,16 @@
                 $(e.currentTarget).next("span").text(e.currentTarget.value);
             });
 
-            this.opts.elm.save.on("click", () => {
-                save();
+            this.opts.elm.save.on("click", async () => {
+                await save();
             });
 
-            this.opts.elm.restore.on("click", () => {
-                restore();
+            this.opts.elm.restore.on("click", async () => {
+                await restore();
             });
         };
 
-        const initSettings = () => { // load settings
+        const initSettings = async () => { // load settings
             const createdDate = +this.opts.elm.creationDate.text();
             const currentYear = new Date().getFullYear();
 
@@ -81,39 +81,34 @@
                 this.opts.elm.creationDate.text(createdDate + " - " + currentYear);
             }
 
-            chrome.storage.sync.get("showIndicator", (obj) => {
-                this.opts.elm.showIndicator[0].checked = typeof obj.showIndicator === "undefined" ? true : (obj.showIndicator === true);
-            });
+            const showIndicator = await chrome.storage.sync.get("showIndicator");
+            this.opts.elm.showIndicator[0].checked = typeof showIndicator === "undefined" ? true : (showIndicator === true);
 
-            chrome.storage.sync.get("closeTab", (obj) => {
-                this.opts.elm.closeTab[0].checked = typeof obj.closeTab === "undefined" ? false : (obj.closeTab === true);
-            });
+            const closeTab = chrome.storage.sync.get("closeTab");
+            this.opts.elm.closeTab[0].checked = typeof closeTab === "undefined" ? false : (closeTab === true);
 
-            chrome.storage.sync.get("navigateForward", (obj) => {
-                this.opts.elm.navigateForward[0].checked = typeof obj.navigateForward === "undefined" ? false : (obj.navigateForward === true);
-            });
+            const navigateForward = chrome.storage.sync.get("navigateForward");
+            this.opts.elm.navigateForward[0].checked = typeof navigateForward === "undefined" ? false : (navigateForward === true);
 
-            chrome.storage.sync.get("openAction", (obj) => {
-                this.opts.elm.openAction[0].value = typeof obj.openAction === "undefined" ? "mousedown" : obj.openAction;
-            });
+            const openAction = chrome.storage.sync.get("openAction");
+            this.opts.elm.openAction[0].value = typeof openAction === "undefined" ? "mousedown" : openAction;
 
-            chrome.storage.sync.get("pxTolerance", (obj) => {
-                let pxToleranceObj = {windowed: 20, maximized: 1};
+            const pxTolerance = chrome.storage.sync.get("pxTolerance");
+            let pxToleranceObj = {windowed: 20, maximized: 1};
 
-                if (typeof obj.pxTolerance !== "undefined") {
-                    pxToleranceObj = obj.pxTolerance;
-                }
+            if (typeof pxTolerance !== "undefined") {
+                pxToleranceObj = pxTolerance;
+            }
 
-                this.opts.elm.pxToleranceMaximized[0].value = pxToleranceObj.maximized;
-                this.opts.elm.pxToleranceWindowed[0].value = pxToleranceObj.windowed;
+            this.opts.elm.pxToleranceMaximized[0].value = pxToleranceObj.maximized;
+            this.opts.elm.pxToleranceWindowed[0].value = pxToleranceObj.windowed;
 
-                this.opts.elm.pxToleranceMaximized.trigger("change");
-                this.opts.elm.pxToleranceWindowed.trigger("change");
-            });
+            this.opts.elm.pxToleranceMaximized.trigger("change");
+            this.opts.elm.pxToleranceWindowed.trigger("change");
         };
 
-        const save = () => { // save settings
-            chrome.storage.sync.set({
+        const save = async () => { // save settings
+            await chrome.storage.sync.set({
                 showIndicator: this.opts.elm.showIndicator[0].checked,
                 closeTab: this.opts.elm.closeTab[0].checked,
                 navigateForward: this.opts.elm.navigateForward[0].checked,
@@ -122,24 +117,21 @@
                     windowed: this.opts.elm.pxToleranceWindowed[0].value,
                     maximized: this.opts.elm.pxToleranceMaximized[0].value
                 }
-            }, () => {
-                this.opts.elm.body.addClass(this.opts.classes.saved);
-                $.delay(1500).then(() => {
-                    this.opts.elm.body.removeClass(this.opts.classes.saved);
-                });
             });
+            this.opts.elm.body.addClass(this.opts.classes.saved);
+            await $.delay(1500);
+            this.opts.elm.body.removeClass(this.opts.classes.saved);
         };
 
-        const restore = () => { // restore default settings
-            chrome.storage.sync.remove(["showIndicator", "closeTab", "navigateForward", "pxTolerance", "openAction"], () => {
-                this.opts.elm.body.addClass(this.opts.classes.restored);
-                $.delay(1500).then(() => {
-                    this.opts.elm.body.removeClass(this.opts.classes.restored);
-                    $.delay(100).then(() => {
-                        location.reload();
-                    });
-                });
-            });
+        const restore = async () => { // restore default settings
+            await chrome.storage.sync.remove(["showIndicator", "closeTab", "navigateForward", "pxTolerance", "openAction"]);
+            this.opts.elm.body.addClass(this.opts.classes.restored);
+
+            await $.delay(1500);
+            this.opts.elm.body.removeClass(this.opts.classes.restored);
+
+            await $.delay(100);
+            location.reload();
         };
 
     };
