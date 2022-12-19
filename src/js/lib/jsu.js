@@ -347,7 +347,7 @@
 
             eventHandlerList[info.event].push({
                 fn: info.fn,
-                name: info.name || (info.event + "_" + (+new Date()) + Math.random().toString(36).substr(2, 12)),
+                name: info.name || (info.event + "_" + (+new Date()) + Math.random().toString(36).substring(2, 14)),
                 opts: info.opts,
                 wantsUntrusted: info.wantsUntrusted
             });
