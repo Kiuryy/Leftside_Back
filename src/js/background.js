@@ -97,7 +97,7 @@
          */
         const initContextmenus = async () => {
             await chrome.contextMenus.removeAll();
-            const uid = Math.random().toString(36).substr(2, 12);
+            const uid = Math.random().toString(36).substring(2, 14);
 
             chrome.contextMenus.create({
                 id: "lsbPrivacy_" + uid,
