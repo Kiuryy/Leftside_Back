@@ -135,6 +135,40 @@
         };
 
         /**
+         *  Workaround to keep service worker alive.
+         *  This prevents the new tab override to fail or flicker due to slow wake up of the service worker
+         *  https://stackoverflow.com/a/66618269/1660305
+         */
+        const keepalive = async () => {
+            const onMessage = (msg, port) => {
+                // eslint-disable-next-line no-console
+                console.log("keepalive message: ", msg, port.sender);
+            };
+
+            const deleteTimer = (port) => {
+                if (port._timer) {
+                    clearTimeout(port._timer);
+                    delete port._timer;
+                }
+            };
+
+            const forceReconnect = (port) => {
+                deleteTimer(port);
+                port.disconnect();
+            };
+
+            chrome.runtime.onConnect.addListener((port) => {
+                if (port.name !== "keepalive") {
+                    return;
+                }
+                port.onMessage.addListener(onMessage);
+                port.onDisconnect.addListener(deleteTimer);
+                // force reconnect after 250s. After 300s the browser would terminate the connection by itself
+                port._timer = setTimeout(forceReconnect, 250 * 100, port);
+            });
+        };
+
+        /**
          *
          */
         this.run = async () => {
@@ -144,6 +178,7 @@
 
             initEvents();
             initMessaging();
+            keepalive();
             await initContextmenus();
 
             /* eslint-disable no-console */

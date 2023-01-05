@@ -19,6 +19,7 @@
          */
         this.run = async () => {
             await initConfig();
+            initKeepalive();
             this.initialized = +new Date();
         };
 
@@ -27,6 +28,23 @@
          * PRIVATE
          * ################################
          */
+
+         /**
+         *  Workaround to keep service worker alive
+         *  https://stackoverflow.com/a/66618269/1660305
+         */
+        const initKeepalive = () => {
+            let port;
+            const connect = () => {
+                port = chrome.runtime.connect({name: "keepalive"});
+                port.onDisconnect.addListener(connect);
+                port.onMessage.addListener(msg => {
+                    // eslint-disable-next-line no-console
+                    console.log("keepalive message: ", msg);
+                });
+            };
+            connect();
+        };
 
         /**
          * Initialises the configuration values for the extension
