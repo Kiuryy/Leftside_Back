@@ -2,6 +2,9 @@
   "extension_name": {
     "message": "Leftside Back"
   },
+  "extension_name_short": {
+    "message": "Back"
+  },
   "extension_desc": {
     "message": "Ermöglicht das Zurücknavigieren durch Klicken am linken oder rechten Bildschirmrand."
   },
