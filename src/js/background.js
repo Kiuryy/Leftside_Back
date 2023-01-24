@@ -139,7 +139,7 @@
          *  This prevents the new tab override to fail or flicker due to slow wake up of the service worker
          *  https://stackoverflow.com/a/66618269/1660305
          */
-        const keepalive = async () => {
+        const keepalive = () => {
             const onMessage = (msg, port) => {
                 // eslint-disable-next-line no-console
                 console.log("keepalive message: ", msg, port.sender);

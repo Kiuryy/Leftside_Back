@@ -247,7 +247,7 @@
                 console.error("Could not determine current Chrome version");
                 process.exit(1);
             } else {
-                const minVersion = currentVersion - 5;
+                const minVersion = Math.max(109, currentVersion - 5); // @TODO remove the hard requirement of Chromium 109 for mv3
 
                 await Func.replace({ // update the min version in the manifest
                     [path.src + "manifest.json"]: path.src + "manifest.json"
