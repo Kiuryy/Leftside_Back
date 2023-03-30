@@ -44,6 +44,10 @@
                 const xhr = new XMLHttpRequest();
                 const idx = runningXhr.push({url: url, xhr: xhr}) - 1;
 
+                if (opts.mimeType) {
+                    xhr.overrideMimeType(opts.mimeType);
+                }
+
                 xhr.open(opts.method || "GET", url, true);
                 ["load", "error", "timeout", "abort"].forEach((eventName) => {
                     xhr.addEventListener(eventName, () => {
