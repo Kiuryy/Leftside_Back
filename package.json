@@ -2,7 +2,7 @@
   "name": "leftside_back",
   "version": "2.0.1",
   "versionName": "2.0.1",
-  "license": "GPL-3.0",
+  "license": "MS-RSL",
   "author": "Philipp König",
   "homepage": "https://extensions.redeviation.com/",
   "repository": {
@@ -19,15 +19,15 @@
   "devDependencies": {
     "concat": "^1.0.3",
     "create-file": "^1.0.1",
-    "del": "^7.0.0",
-    "eslint": "^8.43.0",
+    "del": "^7.1.0",
+    "eslint": "^8.48.0",
     "glob-concat": "^1.0.3",
     "html-minifier": "^4.0.0",
     "jsonminify": "^0.4.2",
-    "sass": "^1.63.4",
-    "npm-check-updates": "^16.10.12",
+    "sass": "^1.66.1",
+    "npm-check-updates": "^16.13.2",
     "read-file": "^0.2.0",
-    "terser": "^5.18.1",
+    "terser": "^5.19.3",
     "zip-dir": "^2.0.0"
   }
 }
