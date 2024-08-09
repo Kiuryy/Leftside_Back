@@ -29,7 +29,7 @@
          * ################################
          */
 
-         /**
+        /**
          *  Workaround to keep service worker alive
          *  https://stackoverflow.com/a/66618269/1660305
          */

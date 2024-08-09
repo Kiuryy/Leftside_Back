@@ -4,9 +4,6 @@
   "short_name": "__MSG_extension_name_short__",
   "description": "__MSG_extension_desc__",
   "default_locale": "en",
-  "version": "0.0.1",
-  "version_name": "Dev",
-  "minimum_chrome_version": "111",
   "homepage_url": "https://extensions.redeviation.com/",
   "background": {
     "service_worker": "js/background.js"
@@ -17,8 +14,7 @@
         "css/style.css"
       ],
       "js": [
-        "js/extension.js",
-        "js/init.js"
+        "js/extension.js"
       ],
       "matches": [
         "<all_urls>"
