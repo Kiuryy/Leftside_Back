@@ -61,20 +61,25 @@ fi
 #
 # JS
 #
-eslint --fix "src/js/**/*.js"
-
+mkdir -p dist/js
 
 if [ "$mode" = "release" ]; then
+
+  eslint --fix "src/js/**/*.js"
   wget https://raw.githubusercontent.com/Kiuryy/jsu.js/master/src/js/jsu.js -O src/js/lib/jsu.js
-  terser_opts="--compress --mangle reserved=['jsu','chrome']"
+  terser_options=(--compress --mangle "reserved=['jsu','chrome']")
+
 else
-  terser_opts="--source-map"
+
+  terser_background_options=(--source-map "url='background.js.map'")
+  terser_extension_options=(--source-map "url='extension.js.map'")
+  terser_settings_options=(--source-map "url='settings.js.map'")
+
 fi
 
-mkdir -p dist/js
-terser src/js/background.js "$terser_opts" --output dist/js/background.js
-terser src/js/extension.js src/js/init.js "$terser_opts" --output dist/js/extension.js
-terser src/js/lib/jsu.js src/js/settings.js "$terser_opts" --output dist/js/settings.js
+terser src/js/background.js "${terser_background_options[@]:-${terser_options[@]}}" --output dist/js/background.js
+terser src/js/extension.js src/js/init.js "${terser_extension_options[@]:-${terser_options[@]}}" --output dist/js/extension.js
+terser src/js/lib/jsu.js src/js/settings.js "${terser_settings_options[@]:-${terser_options[@]}}" --output dist/js/settings.js
 
 
 #

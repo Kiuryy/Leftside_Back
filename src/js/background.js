@@ -42,7 +42,7 @@
          * Initialises the eventhandlers
          */
         const initEvents = () => {
-            chrome.action.onClicked.addListener(async () => { // click on extension icon shall open the sidebar
+            chrome.action.onClicked.addListener(async () => { // click on extension icon shall navigate back
                 const tabs = await chrome.tabs.query({active: true, currentWindow: true});
                 chrome.tabs.sendMessage(tabs[0].id, {
                     action: "navigateBack",
@@ -56,13 +56,9 @@
          *
          * @returns {Promise}
          */
-        const closeTab = () => {
-            return new Promise((resolve) => {
-                chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                    chrome.tabs.remove(tabs[0].id);
-                    resolve();
-                });
-            });
+        const closeTab = async () => {
+            const tabs = await chrome.tabs.query({active: true, currentWindow: true});
+            chrome.tabs.remove(tabs[0].id);
         };
 
         /**
