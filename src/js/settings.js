@@ -9,6 +9,9 @@
          * ################################
          */
 
+        // eslint-disable-next-line no-undef
+        this.ctx = typeof browser === "undefined" ? chrome : browser;
+
         this.opts = {
             classes: {
                 saved: "saved",
@@ -31,7 +34,7 @@
                 restore: $("section#control > button.restore"),
                 creationDate: $("section#about > span.created")
             },
-            manifest: chrome.runtime.getManifest()
+            manifest: this.ctx.runtime.getManifest()
         };
 
 
@@ -52,11 +55,11 @@
 
         const initLanguage = () => {
             $("[data-i18n]").forEach((elm) => {
-                const val = $(elm).attr(this.opts.attr.i18n);
-                $(elm).text(chrome.i18n.getMessage("settings_" + val));
+                const variableName = $(elm).attr(this.opts.attr.i18n);
+                $(elm).text(this.ctx.i18n.getMessage(variableName));
             });
 
-            this.opts.elm.title.text(this.opts.elm.title.text() + " - " + this.opts.manifest.short_name);
+            this.opts.elm.title.text(this.opts.elm.title.text() + " - " + this.opts.manifest.name);
         };
 
         const initEvents = () => {
@@ -81,7 +84,7 @@
                 this.opts.elm.creationDate.text(createdDate + " - " + currentYear);
             }
 
-            const opts = await chrome.storage.sync.get([
+            const opts = await this.ctx.storage.sync.get([
                 "showIndicator",
                 "closeTab",
                 "navigateForward",
@@ -94,7 +97,7 @@
             this.opts.elm.navigateForward[0].checked = typeof opts.navigateForward === "undefined" ? false : (opts.navigateForward === true);
             this.opts.elm.openAction[0].value = typeof opts.openAction === "undefined" ? "mousedown" : opts.openAction;
 
-            let pxToleranceObj = {windowed: 20, maximized: 1};
+            let pxToleranceObj = {windowed: 20, maximized: 5};
             if (typeof opts.pxTolerance !== "undefined") {
                 pxToleranceObj = opts.pxTolerance;
             }
@@ -107,7 +110,7 @@
         };
 
         const save = async () => { // save settings
-            await chrome.storage.sync.set({
+            await this.ctx.storage.sync.set({
                 showIndicator: this.opts.elm.showIndicator[0].checked,
                 closeTab: this.opts.elm.closeTab[0].checked,
                 navigateForward: this.opts.elm.navigateForward[0].checked,
@@ -123,7 +126,7 @@
         };
 
         const restore = async () => { // restore default settings
-            await chrome.storage.sync.remove(["showIndicator", "closeTab", "navigateForward", "pxTolerance", "openAction"]);
+            await this.ctx.storage.sync.remove(["showIndicator", "closeTab", "navigateForward", "pxTolerance", "openAction"]);
             this.opts.elm.body.addClass(this.opts.classes.restored);
 
             await $.delay(1500);

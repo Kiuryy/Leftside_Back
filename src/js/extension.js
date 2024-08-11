@@ -12,6 +12,9 @@
          * ################################
          */
 
+        // eslint-disable-next-line no-undef
+        this.ctx = typeof browser === "undefined" ? chrome : browser;
+
         this.initialized = null;
 
         /**
@@ -36,7 +39,7 @@
         const initKeepalive = () => {
             let port;
             const connect = () => {
-                port = chrome.runtime.connect({name: "keepalive"});
+                port = this.ctx.runtime.connect({name: "keepalive"});
                 port.onDisconnect.addListener(connect);
                 port.onMessage.addListener(msg => {
                     // eslint-disable-next-line no-console
@@ -52,7 +55,7 @@
          * @returns {Promise}
          */
         const initConfig = async () => {
-            const obj = await chrome.storage.sync.get(configFields);
+            const obj = await this.ctx.storage.sync.get(configFields);
             configFields.forEach((field) => {
                 if (typeof obj[field] !== "undefined") {
                     opts.config[field] = obj[field];
@@ -99,7 +102,7 @@
             let backendDead = false;
             opts.type = key;
 
-            let response = await chrome.runtime.sendMessage(opts)["catch"]((err) => {
+            let response = await this.ctx.runtime.sendMessage(opts)["catch"]((err) => {
                 if (err && ("" + err).includes("Could not establish connection")) {
                     backendDead = true;
                 } else {
@@ -175,8 +178,8 @@
             });
 
             // listen for events from the background script
-            chrome.runtime.onMessage.removeListener(handleBackgroundMessage);
-            chrome.runtime.onMessage.addListener(handleBackgroundMessage);
+            this.ctx.runtime.onMessage.removeListener(handleBackgroundMessage);
+            this.ctx.runtime.onMessage.addListener(handleBackgroundMessage);
         };
 
         /**

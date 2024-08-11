@@ -51,8 +51,12 @@ section#wrapper {
         display: block;
         width: 100%;
         height: 100%;
-        background: img('icon/icon.png') no-repeat center / 40px;
+        background: chromeUrl('icon/icon.png') no-repeat center / 40px;
         z-index: 3;
+
+        @supports (-moz-appearance: none) {
+          background-image: url('/img/icon/icon.png');
+        }
       }
 
       &::before, &::after {

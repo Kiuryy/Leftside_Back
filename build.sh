@@ -111,7 +111,7 @@ for target in "${targets[@]}"; do
     content=$(wget -qO- "https://product-details.mozilla.org/1.0/firefox_versions.json")
     latest_firefox_version=$(echo "$content" | jq -r '.LATEST_FIREFOX_VERSION' | cut -d '.' -f 1)
     min_firefox_version=$((latest_firefox_version - supported_firefox_versions))
-    manifest_json=$(echo "$manifest_json" | jq ".browser_specific_settings.gecko.strict_min_version = \"$min_firefox_version\"")
+    manifest_json=$(echo "$manifest_json" | jq ".browser_specific_settings.gecko.strict_min_version = \"$min_firefox_version.0\"")
 
   fi
 
@@ -129,13 +129,19 @@ done
 #
 if [ "$mode" = "release" ]; then
   rm -f ./*.zip
+
+  # source code
+  zip source-code.zip * -x "*.zip" -x "*/"
+  zip -r source-code.zip src
+
+  # extension code
   cd dist || exit
 
   for target in "${targets[@]}"; do
 
     find . -mindepth 1 -maxdepth 1 -type d -print | zip -r "../extension.$target.zip" -@
     cp -a "manifest.$target.json" manifest.json
-    zip -r "../extension.$target.zip" manifest.json
+    zip "../extension.$target.zip" manifest.json
     rm -f manifest.json
 
   done

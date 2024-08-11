@@ -4,49 +4,22 @@
     const background = function () {
 
         this.isDev = false;
-        let reinitialized = null;
+
+        // eslint-disable-next-line no-undef
+        this.ctx = typeof browser === "undefined" ? chrome : browser;
 
         const urls = {
             privacy: "https://extensions.redeviation.com/privacy/lsb"
         };
 
         /**
-         * Injects the content scripts to all tabs and therefore runs the extension there again
-         */
-        const reinitialize = async () => {
-            const manifest = chrome.runtime.getManifest();
-            reinitialized = +new Date();
-
-            const types = {
-                css: "insertCSS",
-                js: "executeScript"
-            };
-
-            const tabs = await chrome.tabs.query({});
-            for (const tab of tabs) {
-                if (typeof tab.url === "undefined" || (!tab.url.startsWith("chrome://") && !tab.url.startsWith("chrome-extension://"))) {
-                    Object.entries(types).forEach(([type, func]) => {
-                        const files = manifest.content_scripts[0][type];
-
-                        for (const file of files) {
-                            chrome.tabs[func](tab.id, {file: file}, () => {
-                                chrome.runtime.lastError; // do nothing specific with the error -> is thrown if the tab cannot be accessed (like chrome:// urls)
-                            });
-                        }
-                    });
-                }
-            }
-        };
-
-        /**
          * Initialises the eventhandlers
          */
         const initEvents = () => {
-            chrome.action.onClicked.addListener(async () => { // click on extension icon shall navigate back
+            this.ctx.action.onClicked.addListener(async () => { // click on extension icon shall navigate back
                 const tabs = await chrome.tabs.query({active: true, currentWindow: true});
                 chrome.tabs.sendMessage(tabs[0].id, {
-                    action: "navigateBack",
-                    reinitialized: reinitialized
+                    action: "navigateBack"
                 });
             });
         };
@@ -57,8 +30,8 @@
          * @returns {Promise}
          */
         const closeTab = async () => {
-            const tabs = await chrome.tabs.query({active: true, currentWindow: true});
-            chrome.tabs.remove(tabs[0].id);
+            const tabs = await this.ctx.tabs.query({active: true, currentWindow: true});
+            this.ctx.tabs.remove(tabs[0].id);
         };
 
         /**
@@ -66,11 +39,10 @@
          */
         const initMessaging = () => {
             const mapping = {
-                closeTab: closeTab,
-                reinitialize: reinitialize
+                closeTab: closeTab
             };
 
-            chrome.runtime.onMessage.addListener((message, sender, callback) => {
+            this.ctx.runtime.onMessage.addListener((message, sender, callback) => {
                 if (mapping[message.type]) { // function for message type exists
                     message.tabId = sender.tab ? sender.tab.id : null;
                     mapping[message.type](message).then((result) => {
@@ -92,18 +64,26 @@
          * @returns {Promise}
          */
         const initContextmenus = async () => {
-            await chrome.contextMenus.removeAll();
+            await this.ctx.contextMenus.removeAll();
             const uid = Math.random().toString(36).substring(2, 14);
 
-            chrome.contextMenus.create({
+            this.ctx.contextMenus.create({
                 id: "lsbPrivacy_" + uid,
                 title: "Privacy", // TODO dynamic
                 contexts: ["action"]
             });
 
-            chrome.contextMenus.onClicked.addListener(async (obj) => {
+            this.ctx.contextMenus.create({
+                id: "lsbSettings_" + uid,
+                title: "Settings", // TODO dynamic
+                contexts: ["action"]
+            });
+
+            this.ctx.contextMenus.onClicked.addListener(async (obj) => {
                 if (obj.menuItemId === "lsbPrivacy_" + uid) {
-                    await openURL(urls.privacy, {lang: chrome.i18n.getUILanguage()});
+                    await openURL(urls.privacy, {lang: this.ctx.i18n.getUILanguage()});
+                } else if (obj.menuItemId === "lsbSettings_" + uid) {
+                    await openURL(this.ctx.runtime.getURL("html/settings.html"), {});
                 }
             });
         };
@@ -121,8 +101,8 @@
                 }).join("&");
             }
 
-            const tabs = await chrome.tabs.query({active: true, currentWindow: true});
-            await chrome.tabs.create({
+            const tabs = await this.ctx.tabs.query({active: true, currentWindow: true});
+            await this.ctx.tabs.create({
                 url: url,
                 active: true,
                 index: tabs[0].index + 1,
@@ -153,7 +133,7 @@
                 port.disconnect();
             };
 
-            chrome.runtime.onConnect.addListener((port) => {
+            this.ctx.runtime.onConnect.addListener((port) => {
                 if (port.name !== "keepalive") {
                     return;
                 }
@@ -168,7 +148,7 @@
          *
          */
         this.run = async () => {
-            const manifest = chrome.runtime.getManifest();
+            const manifest = this.ctx.runtime.getManifest();
             this.isDev = manifest.version_name === "Dev" || !("update_url" in manifest);
             const start = +new Date();
 

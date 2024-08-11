@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title data-i18n="title"></title>
+    <title data-i18n="settings_title"></title>
     <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,500,100i,300i,500i' rel='stylesheet'
           type='text/css'/>
     <link rel='stylesheet' type='text/css' href='/css/settings.css'/>
@@ -12,57 +12,57 @@
 <section id="wrapper">
     <header>
         <div id="logo"><span></span></div>
-        <h1 data-i18n="title"></h1>
+        <h1 data-i18n="settings_title"></h1>
     </header>
 
     <main>
         <div class="box">
-            <label data-i18n="px_tolerance"></label>
-            <span class="subLabel" data-i18n="px_tolerance_maximized"></span>
+            <label data-i18n="settings_px_tolerance"></label>
+            <span class="subLabel" data-i18n="settings_px_tolerance_maximized"></span>
             <input type="range" id="pxToleranceMaximized" value="1" min="1" max="50"/>
             <span data-unit="px"></span>
-            <span class="subLabel" data-i18n="px_tolerance_windowed"></span>
+            <span class="subLabel" data-i18n="settings_px_tolerance_windowed"></span>
             <input type="range" id="pxToleranceWindowed" value="1" min="1" max="50"/>
             <span data-unit="px"></span>
-            <p data-i18n="px_tolerance_desc"></p>
+            <p data-i18n="settings_px_tolerance_desc"></p>
         </div>
 
         <div class="box">
-            <label for="openAction" data-i18n="open_action"></label>
+            <label for="openAction" data-i18n="settings_open_action"></label>
             <select id="openAction">
-                <option value="mousedown" data-i18n="open_action_leftclick"></option>
-                <option value="contextmenu" data-i18n="open_action_rightclick"></option>
+                <option value="mousedown" data-i18n="settings_open_action_leftclick"></option>
+                <option value="contextmenu" data-i18n="settings_open_action_rightclick"></option>
             </select>
-            <p data-i18n="open_action_desc"></p>
+            <p data-i18n="settings_open_action_desc"></p>
         </div>
 
         <div class="box">
-            <label for="showIndicator" data-i18n="show_indicator"></label>
+            <label for="showIndicator" data-i18n="settings_show_indicator"></label>
             <input type="checkbox" id="showIndicator"/>
-            <p data-i18n="show_indicator_desc"></p>
+            <p data-i18n="settings_show_indicator_desc"></p>
         </div>
 
         <div class="box">
-            <label for="closeTab" data-i18n="close_tab"></label>
+            <label for="closeTab" data-i18n="settings_close_tab"></label>
             <input type="checkbox" id="closeTab"/>
-            <p data-i18n="close_tab_desc"></p>
+            <p data-i18n="settings_close_tab_desc"></p>
         </div>
 
         <div class="box">
-            <label for="navigateForward" data-i18n="navigate_forward"></label>
+            <label for="navigateForward" data-i18n="settings_navigate_forward"></label>
             <input type="checkbox" id="navigateForward"/>
-            <p data-i18n="navigate_forward_desc"></p>
+            <p data-i18n="settings_navigate_forward_desc"></p>
         </div>
     </main>
 
     <section id="control">
-        <button class="save" data-i18n="save"></button>
-        <button class="restore" data-i18n="restore"></button>
+        <button class="save" data-i18n="settings_save"></button>
+        <button class="restore" data-i18n="settings_restore"></button>
     </section>
 </section>
 
-<div id="savedMsg"><span data-i18n="saved_success"></span></div>
-<div id="restoreMsg"><span data-i18n="restored_success"></span></div>
+<div id="savedMsg"><span data-i18n="settings_saved_success"></span></div>
+<div id="restoreMsg"><span data-i18n="settings_restored_success"></span></div>
 
 <script src='/js/settings.js'></script>
 </body>
