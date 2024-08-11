@@ -13,7 +13,7 @@
             loaded: "redeviation-lsb-loaded"
         },
         config: {
-            pxTolerance: {windowed: 20, maximized: 1},
+            pxTolerance: {windowed: 20, maximized: 5},
             openAction: "mousedown",
             showIndicator: true,
             closeTab: false,

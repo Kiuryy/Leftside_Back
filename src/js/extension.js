@@ -252,7 +252,7 @@
                             pixelTolerance = opts.config.indicatorWidth;
                         }
 
-                        ret = pageX < pixelTolerance;
+                        ret = pageX <= pixelTolerance;
                     }
                 }
             }

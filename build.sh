@@ -92,12 +92,6 @@ for target in "${targets[@]}"; do
   manifest_json=$(echo "$manifest_json" | jq ".version = $extension_version")
 
   if [ "$mode" = "release" ]; then
-    manifest_json=$(echo "$manifest_json" | jq ".version_name = $extension_version")
-  else
-    manifest_json=$(echo "$manifest_json" | jq ".version_name = \"Dev\"")
-  fi
-
-  if [ "$mode" = "release" ]; then
     manifest_json=$(echo "$manifest_json" | sed 's/icon\/dev\//icon\//g')
   fi
 
@@ -107,6 +101,10 @@ for target in "${targets[@]}"; do
     latest_chrome_version=$(echo "$content" | jq -r '.versions[0].version' | cut -d '.' -f 1)
     min_chrome_version=$((latest_chrome_version - supported_chrome_versions))
     manifest_json=$(echo "$manifest_json" | jq ".minimum_chrome_version = \"$min_chrome_version\"")
+
+    if [ "$mode" = "build" ]; then
+      manifest_json=$(echo "$manifest_json" | jq ".version_name = \"Dev\"")
+    fi
 
   elif [ "$target" = "firefox" ]; then
 

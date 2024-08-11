@@ -9,6 +9,6 @@
   pointer-events: auto;
 }
 
-@function img($path) {
+@function chromeUrl($path) {
   @return url(chrome-extension://__MSG_@@extension_id__/img/#{$path});
 }
