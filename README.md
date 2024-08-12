@@ -14,6 +14,7 @@ Leftside Back is a browser extension, which allows you to navigate back by just 
 <a href="https://addons.mozilla.org/de/firefox/addon/leftside-back/" target="_blank"><img src="https://extensions.redeviation.com/img/github_download_firefox.png" width="160" /></a>
 
 The extension should work with all Chromium-based browsers, while officially only Chrome and Edge are fully supported.
+You can also download the extension for Firefox.
 
 ## Release History
 See the [Release History](https://github.com/Kiuryy/Leftside_Back/releases) for an overview about all versions.
